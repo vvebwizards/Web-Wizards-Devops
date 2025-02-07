@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout code from GitHub
+                git branch: 'main', url: 'https://github.com/Hafedh-Jendoubi/Web-Wizards-Devops'
+             
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Add your build steps here
+                echo 'Building the project...'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Add your test steps here
+                echo 'Running tests...'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Add your deployment steps here
+                echo 'Deploying the project...'
+            }
+        }
+    }
+}
