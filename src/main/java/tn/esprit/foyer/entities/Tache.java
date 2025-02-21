@@ -29,7 +29,8 @@ public class Tache implements Serializable {
     Etudiant etudiant;
     @OneToOne(mappedBy = "tache")
     Etudiant etudiantResponsable;
-
+    @Enumerated(EnumType.STRING)
+    EtatTache etatTache;
 
 
 
