@@ -71,7 +71,7 @@ public class TacheRestController {
     }
 
     @GetMapping("/studentsPerformanceRanking/{dateDebut}/{dateFin}")
-    public LinkedHashMap<Float, Etudiant> studentsPerformanceRanking(@PathVariable LocalDate dateDebut, @PathVariable LocalDate dateFin) {
+    public LinkedHashMap<Float, List<Etudiant>> studentsPerformanceRanking(@PathVariable LocalDate dateDebut, @PathVariable LocalDate dateFin) {
         return tacheService.studentsPerformanceRanking(dateDebut,dateFin);
     }
 

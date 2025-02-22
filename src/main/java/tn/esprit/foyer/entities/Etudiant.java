@@ -1,11 +1,15 @@
 package tn.esprit.foyer.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,25 +32,19 @@ public class Etudiant implements Serializable {
 
 
 
-
-
-
-
-
-
-
     @OneToMany(mappedBy = "etudiant")
-    List<Tache> taches;
+    @JsonIgnore
+    Set<Tache> tacheSet;
+
     Float montantInscription;
     @Enumerated(EnumType.STRING)
     TypeEtudiant typeEtudiant;
 
     @ManyToMany(mappedBy = "etudiants",fetch = FetchType.EAGER)
+    @JsonIgnore
     List<Reservation> reservations;
 
-    @OneToOne
-    Tache tache;
-    public Etudiant(String nomEt, String prenomEt, String ecole) {
+    public Etudiant(String nomEt, String prenomEt, String ecole ) {
         this.nomEt = nomEt;
         this.prenomEt = prenomEt;
         this.ecole = ecole;

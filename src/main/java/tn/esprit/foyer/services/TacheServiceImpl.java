@@ -12,10 +12,7 @@ import tn.esprit.foyer.repository.EtudiantRepository;
 import tn.esprit.foyer.repository.TacheRepository;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +47,11 @@ public class TacheServiceImpl implements ITacheService{
         tacheRepository.deleteById(idTache);
     }
 
+    @Override
+    public void removeTachesByEtudiant(String nom, String prenom) {
+       List<Tache> taches = tacheRepository.findTacheByEtudiant(nom,prenom);
+        tacheRepository.deleteAll(taches);
+    }
 
 
     public Integer findAllStudents(LocalDate dateDebut,LocalDate dateFin) {
@@ -130,7 +132,6 @@ public class TacheServiceImpl implements ITacheService{
                 tachesCompletees++;
             }
         }
-
         if (totalTachesPlanifie == 0) {
             return 0;
         }
@@ -145,7 +146,7 @@ public class TacheServiceImpl implements ITacheService{
 
         for (Tache task : tasks) {
             LocalDate dateFinTache = task.getDateTache().atStartOfDay().plusHours(task.getDuree()).toLocalDate();
-            if (!task.getDateTache().isBefore(dateDebut) && !dateFinTache.isAfter(dateFin)) {
+            if (!task.getDateTache().isBefore(dateDebut) && !dateFinTache.isAfter(dateFin) ) {
                 totalRevenue += task.getTarifHoraire() * task.getDuree();
                 log.info("revenu resultttttttt: {}", totalRevenue);
             }
@@ -196,24 +197,29 @@ public class TacheServiceImpl implements ITacheService{
         return result;
     }
 
+
     @Override
-    public LinkedHashMap<Float, Etudiant> studentsPerformanceRanking(LocalDate dateDebut, LocalDate dateFin) {
+    public LinkedHashMap<Float, List<Etudiant>> studentsPerformanceRanking(LocalDate dateDebut, LocalDate dateFin) {
         List<Etudiant> etudiants = etudiantRepository.findAll();
-        Map<Float, Etudiant> performanceMap = new HashMap<>();
+        Map<Float, List<Etudiant>> performanceMap = new HashMap<>();
+
         for (Etudiant etudiant : etudiants) {
             float performance = this.studentPerformance(etudiant, dateDebut, dateFin);
-            performanceMap.put(performance, etudiant);
+            performanceMap.computeIfAbsent(performance, k -> new ArrayList<>())
+                    .add(etudiant);
         }
 
         return performanceMap.entrySet()
                 .stream()
-                .sorted(Map.Entry.<Float, Etudiant>comparingByKey().reversed())
+                .sorted(Map.Entry.<Float, List<Etudiant>>comparingByKey().reversed())
                 .collect(Collectors.toMap(
-                        entry -> entry.getKey(),
-                        entry -> entry.getValue(),
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
                         (e1, e2) -> e1,
                         LinkedHashMap::new
                 ));
     }
+
+
 }
 
