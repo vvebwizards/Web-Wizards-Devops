@@ -25,5 +25,5 @@ public interface TacheRepository extends JpaRepository<Tache,Long> {
     @Query("SELECT t FROM Tache t WHERE t.etudiant.nomEt = :nom and t.etudiant.prenomEt=:prenom")
     List<Tache> findTacheByEtudiant(@Param("nom") String nom , @Param("prenom") String prenom);
 
-    List<Tache> findAllByDateBetween(LocalDate startDate, LocalDate endDate);
+    List<Tache> findAllByDateTacheBetween(LocalDate startDate, LocalDate endDate);
 }
