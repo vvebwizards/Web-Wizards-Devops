@@ -73,7 +73,7 @@ public class TacheServiceMockitoImpl {
         Float nouveauMontant = result.get("Nour Tr");
         assertNotNull(nouveauMontant, "Le montant mis à jour ne doit pas être NULL !");
         assertEquals(80.0f, nouveauMontant, "Le montant mis à jour est incorrect");
-        
+
 
         System.out.println("✅ Test réussi avec Mockito : Nouveau montant d'inscription = " + nouveauMontant);
     }

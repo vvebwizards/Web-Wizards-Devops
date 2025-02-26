@@ -63,6 +63,8 @@ public class TacheServiceImplTest {
         assertNotNull(nouveauMontant, "Le montant mis à jour ne doit pas être NULL !");
         assertEquals(70.0f, nouveauMontant, "Le montant mis à jour est incorrect"); // ✅ Validation correcte
 
+        tacheService.removeTache(tacheSaved.getIdTache());
+        etudiantService.removeEtudiant(etudiantSaved.getIdEtudiant());
         System.out.println("✅ Test réussi : Nouveau montant d'inscription = " + nouveauMontant);
     }
 }
