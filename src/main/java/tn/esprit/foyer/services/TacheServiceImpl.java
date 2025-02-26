@@ -58,7 +58,9 @@ public class TacheServiceImpl implements ITacheService{
         tacheRepository.saveAll(taches);
         return taches;
     }
-
+    public Tache findById(Long id) {
+        return tacheRepository.findById(id).orElse(null);
+    }
     @Override
     public HashMap<String, Float> calculNouveauMontantInscriptionDesEtudiants() {
         HashMap<String, Float> nouveauxMontantsInscription = new HashMap<>();

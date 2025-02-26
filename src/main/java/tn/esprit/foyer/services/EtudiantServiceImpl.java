@@ -48,7 +48,9 @@ public class EtudiantServiceImpl implements  IEtudiantService{
         log.info("debut methode updateEtudiant");
         return etudiantRepository.save(e);
     }
-
+    public Etudiant findById(Long id) {
+        return etudiantRepository.findById(id).orElse(null);
+    }
     @Override
     public Etudiant retrieveEtudiant(Long idEtudiant) {
         Etudiant e = etudiantRepository.findById(idEtudiant).orElse(null);
