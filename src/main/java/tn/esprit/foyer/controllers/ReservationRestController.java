@@ -7,6 +7,7 @@ import tn.esprit.foyer.services.IReservationService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -62,5 +63,11 @@ public class ReservationRestController {
     @ResponseBody
     public List<Reservation> getReservationParAnneeUniversitaire(@PathVariable("dateDebut") LocalDate dateDebut,@PathVariable("dateFin") LocalDate dateFin) {
         return reservationService.getReservationParAnneeUniversitaire(dateDebut,dateFin);
+    }
+
+    @GetMapping("/test")
+    @ResponseBody
+    public Map<Long, Integer> Test() {
+        return reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
     }
 }
