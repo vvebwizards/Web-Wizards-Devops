@@ -10,6 +10,7 @@ import tn.esprit.foyer.entities.Foyer;
 import tn.esprit.foyer.entities.TypeChambre;
 import tn.esprit.foyer.repository.BlocRepository;
 import tn.esprit.foyer.repository.ChambreRepository;
+import tn.esprit.foyer.repository.ReservationRepository;
 import tn.esprit.foyer.repository.FoyerRepository;
 
 import java.time.LocalDate;

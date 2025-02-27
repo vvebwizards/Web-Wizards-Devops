@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -21,8 +22,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Reservation implements Serializable {
     @Id
-    @Column(name="idReservation",length = 50)
-    String idReservation; // Clé primaire
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    String idReservation;
    // @Temporal(TemporalType.DATE)
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy")
     LocalDate anneeUniversitaire;
@@ -30,6 +32,13 @@ public class Reservation implements Serializable {
     @ManyToMany()
     @JsonIgnore
     List<Etudiant> etudiants;
+    @ManyToOne
+    @JoinColumn(name = "chambre_id")
+    private Chambre chambre;
 
+    public Reservation(LocalDate anneeUniversitaire, boolean estValid) {
+        this.anneeUniversitaire = anneeUniversitaire;
+        this.estValid = estValid; // Initialize the estValid field
+    }
 }
 

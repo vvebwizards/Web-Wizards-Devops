@@ -63,4 +63,8 @@ public class ReservationRestController {
     public List<Reservation> getReservationParAnneeUniversitaire(@PathVariable("dateDebut") LocalDate dateDebut,@PathVariable("dateFin") LocalDate dateFin) {
         return reservationService.getReservationParAnneeUniversitaire(dateDebut,dateFin);
     }
+    @GetMapping("/places-disponibles")
+    public List<String> getNbPlacesDisponiblesParChambreAnneeEnCours() {
+        return reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
+    }
 }

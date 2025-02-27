@@ -16,5 +16,6 @@ public interface IReservationService {
             numChambre, long cin) ;
 
     List<Reservation> getReservationParAnneeUniversitaire(LocalDate dateDebut, LocalDate dateFin) ;
+    List<String> nbPlacesDisponibleParChambreAnneeEnCours();
 
 }

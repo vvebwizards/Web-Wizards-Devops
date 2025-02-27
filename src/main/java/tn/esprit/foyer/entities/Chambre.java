@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,12 +23,6 @@ public class Chambre implements Serializable {
     @Enumerated(EnumType.STRING)
     TypeChambre typeC;
 
-
-
-
-
-
-
     @OneToMany(fetch = FetchType.EAGER)
     List<Reservation> reservations;
     @ManyToOne
@@ -35,5 +30,10 @@ public class Chambre implements Serializable {
     Bloc bloc;
 
 
+    public Chambre(Long idChambre, TypeChambre typeC) {
+        this.idChambre = idChambre;
+        this.typeC = typeC;
+        this.reservations = new ArrayList<>(); // Initialize the reservations list
+    }
 }
 
