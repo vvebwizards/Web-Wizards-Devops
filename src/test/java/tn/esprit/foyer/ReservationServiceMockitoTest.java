@@ -26,12 +26,10 @@ public class ReservationServiceMockitoTest {
     @Mock
     private ChambreRepository chambreRepository;
 
-    @Mock
-    private ReservationRepository reservationRepository;
 
     @Test
     public void testNbPlacesDisponibleParChambreAnneeEnCours_Mockito() {
-        // Préparation des données simulées
+
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(101L);
         chambre.setTypeC(TypeChambre.DOUBLE);
@@ -42,10 +40,61 @@ public class ReservationServiceMockitoTest {
 
         when(chambreRepository.findAll()).thenReturn(Arrays.asList(chambre));
 
-        // Exécution de la méthode à tester
+
         List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
 
-        // Vérification des résultats
+
         assertTrue(result.stream().anyMatch(s -> s.contains("101") && s.contains("1")));
     }
+    @Test
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_MultipleReservations_Mockito() {
+        Chambre chambre = new Chambre();
+        chambre.setNumeroChambre(606L);
+        chambre.setTypeC(TypeChambre.TRIPLE);
+
+        Reservation reservation1 = new Reservation(LocalDate.now(), true);
+        Reservation reservation2 = new Reservation(LocalDate.now(), true);
+        chambre.setReservations(Arrays.asList(reservation1, reservation2));
+
+        when(chambreRepository.findAll()).thenReturn(Arrays.asList(chambre));
+
+        List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
+
+        assertTrue(result.stream().anyMatch(s -> s.contains("606") && s.contains("1")));
+    }
+
+    @Test
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_InvalidReservations_Mockito() {
+        Chambre chambre = new Chambre();
+        chambre.setNumeroChambre(707L);
+        chambre.setTypeC(TypeChambre.SIMPLE);
+
+        Reservation reservation = new Reservation(LocalDate.now(), false);
+        chambre.setReservations(Arrays.asList(reservation));
+
+        when(chambreRepository.findAll()).thenReturn(Arrays.asList(chambre));
+
+        List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
+
+        assertTrue(result.stream().anyMatch(s -> s.contains("707") && s.contains("1")));
+    }
+
+    @Test
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_OldReservations_Mockito() {
+        Chambre chambre = new Chambre();
+        chambre.setNumeroChambre(808L);
+        chambre.setTypeC(TypeChambre.DOUBLE);
+
+        Reservation reservation = new Reservation(LocalDate.of(2023, 5, 15), true);
+        chambre.setReservations(Arrays.asList(reservation));
+
+        when(chambreRepository.findAll()).thenReturn(Arrays.asList(chambre));
+
+        List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
+
+
+        assertTrue(result.stream().anyMatch(s -> s.contains("808") && s.contains("2")));
+    }
+
+
 }

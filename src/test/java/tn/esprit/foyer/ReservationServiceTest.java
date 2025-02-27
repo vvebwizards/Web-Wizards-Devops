@@ -3,7 +3,6 @@ package tn.esprit.foyer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tn.esprit.foyer.entities.Chambre;
@@ -41,11 +40,80 @@ public class ReservationServiceTest {
         reservation.setChambre(chambre);
         reservationRepository.save(reservation);
 
-        // Exécution de la méthode à tester
+
         List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
 
-        // Vérification des résultats
+
         assertTrue(result.stream().anyMatch(s -> s.contains("101") && s.contains("1")));
     }
+    @Test
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_MultipleReservations() {
+        Chambre chambre = new Chambre();
+        chambre.setNumeroChambre(202L);
+        chambre.setTypeC(TypeChambre.DOUBLE);
+        chambre = chambreRepository.save(chambre);
+
+        Reservation reservation1 = new Reservation(LocalDate.now(), true);
+        reservation1.setChambre(chambre);
+        reservationRepository.save(reservation1);
+
+        Reservation reservation2 = new Reservation(LocalDate.now(), true);
+        reservation2.setChambre(chambre);
+        reservationRepository.save(reservation2);
+
+        List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
+
+        // Since it's a DOUBLE room with two valid reservations, available places should be 0
+        assertTrue(result.stream().anyMatch(s -> s.contains("202") && s.contains("0")));
+    }
+
+    @Test
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_ReservationsOutsideCurrentYear() {
+        Chambre chambre = new Chambre();
+        chambre.setNumeroChambre(303L);
+        chambre.setTypeC(TypeChambre.SIMPLE);
+        chambre = chambreRepository.save(chambre);
+
+        // Reservation outside the current year
+        Reservation reservation = new Reservation(LocalDate.of(2023, 12, 31), true);
+        reservation.setChambre(chambre);
+        reservationRepository.save(reservation);
+
+        List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
+
+        // The reservation is outside the current year, so the room should still have 1 available place
+        assertTrue(result.stream().anyMatch(s -> s.contains("303") && s.contains("1")));
+    }
+
+    @Test
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_TripleRoomPartialOccupation() {
+        Chambre chambre = new Chambre();
+        chambre.setNumeroChambre(404L);
+        chambre.setTypeC(TypeChambre.TRIPLE);
+        chambre = chambreRepository.save(chambre);
+
+        // Adding one valid reservation (one occupied spot)
+        Reservation reservation = new Reservation(LocalDate.now(), true);
+        reservation.setChambre(chambre);
+        reservationRepository.save(reservation);
+
+        List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
+
+        // Since it's a TRIPLE room with one valid reservation, available places should be 2
+        assertTrue(result.stream().anyMatch(s -> s.contains("404") && s.contains("2")));
+    }
+
+    @Test
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_NoReservations() {
+        Chambre chambre = new Chambre();
+        chambre.setNumeroChambre(505L);
+        chambre.setTypeC(TypeChambre.DOUBLE);
+        chambre = chambreRepository.save(chambre);
+
+        List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
+        
+        assertTrue(result.stream().anyMatch(s -> s.contains("505") && s.contains("2")));
+    }
+
 }
 
