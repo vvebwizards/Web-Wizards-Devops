@@ -1,6 +1,5 @@
 package tn.esprit.foyer.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -29,7 +27,7 @@ public class Reservation implements Serializable {
     Boolean estValid;
     @ManyToMany()
     @JsonIgnore
-    List<Etudiant> etudiants;
+    private List<Etudiant> etudiants;
 
 }
 
