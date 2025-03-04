@@ -2,7 +2,6 @@ package tn.esprit.foyer.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.entities.Etudiant;
 import tn.esprit.foyer.entities.Tache;
@@ -37,8 +36,10 @@ public class TacheServiceImpl implements ITacheService{
 
     @Override
     public Tache retrieveTache(Long idTache) {
-        return tacheRepository.findById(idTache).get();
+        return tacheRepository.findById(idTache)
+                .orElseThrow(() -> new RuntimeException("Tache non trouvée avec l'ID : " + idTache));
     }
+
 
     @Override
     public void removeTache(Long idTache) {
@@ -51,10 +52,8 @@ public class TacheServiceImpl implements ITacheService{
     @Override
     public List<Tache> addTachesAndAffectToEtudiant(List<Tache> taches, String nomEt, String prenomEt) {
         Etudiant et = etudiantRepository.findByNomEtAndPrenomEt(nomEt,prenomEt);
-        taches.forEach(tache -> {
-            tache.setEtudiant(et);
-          //  tacheRepository.save(tache);
-        });
+        taches.forEach(tache ->
+            tache.setEtudiant(et));
         tacheRepository.saveAll(taches);
         return taches;
     }
