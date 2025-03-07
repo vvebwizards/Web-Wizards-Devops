@@ -55,7 +55,7 @@
 		</dependency>
 	</dependencies>
 
-  // Hafedh's Computer Settings
+  <!-- Hafedh's Computer Settings -->
   <distributionManagement>
     <repository>
       <id>deploymentRepo</id>
