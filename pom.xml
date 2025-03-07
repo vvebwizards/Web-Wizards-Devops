@@ -48,16 +48,33 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
+  // Hafedh's Computer Settings
+  <distributionManagement>
+    <repository>
+      <id>deploymentRepo</id>
+      <name>Nexus Repository</name>
+      <url>http://172.29.60.92:8081/repository/maven-releases/</url>
+    </repository>
+  </distributionManagement>
 
-	<distributionManagement>
-		<repository>
-			<id>deploymentRepo</id>
-			<name>Nexus Repository</name>
-			<url>http://172.21.120.96:8081/repository/maven-releases/</url>
-		</repository>
-	</distributionManagement>
+  <!-- Nour's Computer Settings -->
+  <!--
+  <distributionManagement>
+    <repository>
+      <id>deploymentRepo</id>
+      <name>Nexus Repository</name>
+      <url>http://172.21.120.96:8081/repository/maven-releases/</url>
+    </repository>
+  </distributionManagement>
+  -->
+  
 	<build>
 		<plugins>
 			<!-- Plugin Spring Boot -->

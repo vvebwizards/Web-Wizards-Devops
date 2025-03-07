@@ -14,7 +14,9 @@ import tn.esprit.foyer.repository.EtudiantRepository;
 import tn.esprit.foyer.repository.ReservationRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -122,44 +124,44 @@ public class ReservationServicImpl implements IReservationService {
     }
 
   //  @Scheduled(fixedRate = 60000)
-    public void nbPlacesDisponibleParChambreAnneeEnCours() {
-        LocalDate currentdate = LocalDate.now();
-        LocalDate dateDebut = LocalDate.of(currentdate.getYear(),12,31);
-        LocalDate dateFin = LocalDate.of(currentdate.getYear(),1,1);
-        List<Chambre> chambresDisponibles = chambreRepository.findAll();
-        chambresDisponibles.forEach(
-                chambre -> {
-         //       AtomicReference<Integer> nbChambresOccupes = new AtomicReference<>(0);
-                  AtomicReference<Integer> nbChambresOccupes = new AtomicReference<>(0);
+  public Map<Long, Integer> nbPlacesDisponibleParChambreAnneeEnCours() {
+      LocalDate currentdate = LocalDate.now();
+      LocalDate dateDebut = LocalDate.of(currentdate.getYear(), 1, 1);
+      LocalDate dateFin = LocalDate.of(currentdate.getYear(), 12, 31);
 
-                    if(chambre.getReservations()!=null)
-                    {
-                        List<Reservation> reservations = chambre.getReservations();
-                        reservations.stream().forEach(
-                                reservation -> {
-                                    if (reservation.getEstValid() && reservation.getAnneeUniversitaire().isAfter(dateDebut) && reservation.getAnneeUniversitaire().isBefore(dateFin))
-                                       nbChambresOccupes.getAndSet(nbChambresOccupes.get() + 1);
-                                }
-                        );
-                    }
-                    if(chambre.getTypeC().equals(TypeChambre.SIMPLE))
-                    {
-                     log.info("nb places restantes en "+currentdate.getYear()+" pour la chambre "+chambre.getNumeroChambre()
-                     + " est égale à " + (1- nbChambresOccupes.get()));
-                    }
-                    else  if(chambre.getTypeC().equals(TypeChambre.DOUBLE)){
-                        log.info("nb places restantes en "+currentdate.getYear()+" pour la chambre "+chambre.getNumeroChambre()
-                                + " est égale à " + (2- nbChambresOccupes.get()));
-                    }
-                    else { // cas triple
-                        log.info("nb places restantes en "+currentdate.getYear()+ " pour la chambre "+chambre.getNumeroChambre()
-                                + " est égale à " + (3- nbChambresOccupes.get()));
-                    }
+      List<Chambre> chambresDisponibles = chambreRepository.findAll();
+      Map<Long, Integer> placesRestantes = new HashMap<>();
 
+      for (Chambre chambre : chambresDisponibles) {
+          int nbChambresOccupes = 0;
 
+          if (chambre.getReservations() != null) {
+              nbChambresOccupes = (int) chambre.getReservations().stream()
+                      .filter(reservation -> reservation.getEstValid() &&
+                              reservation.getAnneeUniversitaire().isAfter(dateDebut) &&
+                              reservation.getAnneeUniversitaire().isBefore(dateFin))
+                      .count();
+          }
 
-                }
-        );
+          int capacite;
+          switch (chambre.getTypeC()) {
+              case SIMPLE:
+                  capacite = 1;
+                  break;
+              case DOUBLE:
+                  capacite = 2;
+                  break;
+              case TRIPLE:
+                  capacite = 3;
+                  break;
+              default:
+                  capacite = 0;
+          }
 
-    }
+          placesRestantes.put(chambre.getNumeroChambre(), Math.max(0, capacite - nbChambresOccupes));
+      }
+
+      return placesRestantes;
+  }
+
 }
