@@ -55,16 +55,9 @@
 		</dependency>
 	</dependencies>
 
-	<distributionManagement>
-		<repository>
-			<id>deploymentRepo</id>
-			<name>Nexus Repository</name>
-			<url>http://172.29.60.92:8081/repository/maven-releases/</url>
-		</repository>
-	</distributionManagement>
-
 	<build>
 		<plugins>
+			<!-- Plugin Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -76,6 +69,27 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+
+			<!-- Plugin JaCoCo -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version> <!-- Vérifiez la dernière version -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
