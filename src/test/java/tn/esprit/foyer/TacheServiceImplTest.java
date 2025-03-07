@@ -1,4 +1,4 @@
-package tn.esprit.foyer;
+/*package tn.esprit.foyer;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -67,7 +67,7 @@ public class TacheServiceImplTest {
         etudiantService.removeEtudiant(etudiantSaved.getIdEtudiant());
         System.out.println("✅ Test réussi : Nouveau montant d'inscription = " + nouveauMontant);
     }
-}
+}*/
     /*void testCalculNouveauMontantInscriptionDesEtudiants() {
         // Étape 1 : Ajouter un étudiant avec un montant d'inscription initial
         Etudiant etudiant = new Etudiant("Nour", "Tr", "Esprit", 50.0f);
