@@ -55,14 +55,26 @@
 		</dependency>
 	</dependencies>
 
-	<distributionManagement>
-		<repository>
-			<id>deploymentRepo</id>
-			<name>Nexus Repository</name>
-			<url>http://172.29.60.92:8081/repository/maven-releases/</url>
-		</repository>
-	</distributionManagement>
+  // Hafedh's Computer Settings
+  <distributionManagement>
+    <repository>
+      <id>deploymentRepo</id>
+      <name>Nexus Repository</name>
+      <url>http://172.29.60.92:8081/repository/maven-releases/</url>
+    </repository>
+  </distributionManagement>
 
+  <!-- Nour's Computer Settings -->
+  <!--
+  <distributionManagement>
+    <repository>
+      <id>deploymentRepo</id>
+      <name>Nexus Repository</name>
+      <url>http://172.21.120.96:8081/repository/maven-releases/</url>
+    </repository>
+  </distributionManagement>
+  -->
+  
 	<build>
 		<plugins>
 			<!-- Plugin Spring Boot -->
@@ -101,5 +113,6 @@
 			</plugin>
 		</plugins>
 	</build>
+
 
 </project>
