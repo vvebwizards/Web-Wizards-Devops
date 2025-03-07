@@ -46,10 +46,17 @@ public class Etudiant implements Serializable {
 
     @OneToOne
     Tache tache;
-    public Etudiant(String nomEt, String prenomEt, String ecole) {
+   /* public Etudiants(String nomEt, String prenomEt, String ecole) {
         this.nomEt = nomEt;
         this.prenomEt = prenomEt;
         this.ecole = ecole;
+    }*/
+
+    public Etudiant(String nomEt, String prenomEt, String ecole,float montantInscription) {
+        this.nomEt = nomEt;
+        this.prenomEt = prenomEt;
+        this.ecole = ecole;
+        this.montantInscription= montantInscription;
     }
 
 
