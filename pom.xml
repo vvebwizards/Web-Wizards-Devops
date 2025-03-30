@@ -11,8 +11,8 @@
 	<groupId>tn.esprit</groupId>
 	<artifactId>4Twin4-G3-Foyer</artifactId>
 	<version>3.0.0</version>
-	<name>foyer</name>
-	<description>foyer</description>
+	<name>4Twin4-G3-Foyer</name>
+	<description>4Twin4-G3-Foyer</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
