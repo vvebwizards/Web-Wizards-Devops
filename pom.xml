@@ -76,6 +76,7 @@
   -->
   
 	<build>
+		<finalName>4TWIN4-G3-Foyer</finalName>
 		<plugins>
 			<!-- Plugin Spring Boot -->
 			<plugin>
