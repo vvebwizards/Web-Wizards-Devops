@@ -1,6 +1,8 @@
 FROM maven:3.8.4-openjdk-17
 WORKDIR /foyer
 EXPOSE 8083
-ADD target/4Twin4-G3-Foyer-3.0.0.jar foyer-3.0.0.jar
+ARG NEXUS_USERNAME
+ARG NEXUS_PASSWORD
+ARG NEXUS_URL
+RUN curl -L -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" -o foyer-3.0.0.jar "${NEXUS_URL}"
 ENTRYPOINT ["java","-jar","foyer-3.0.0.jar"]
-
