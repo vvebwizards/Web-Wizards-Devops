@@ -3,10 +3,13 @@ package tn.esprit.foyer.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.foyer.entities.Etudiant;
 import tn.esprit.foyer.entities.Tache;
 import tn.esprit.foyer.services.ITacheService;
 
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
@@ -57,5 +60,19 @@ public class TacheRestController {
     @GetMapping("/calculNouveauMontantInscriptionDesEtudiants")
     public HashMap<String, Float> calculNouveauMontantInscriptionDesEtudiants() {
       return  tacheService.calculNouveauMontantInscriptionDesEtudiants();
+    }
+
+    @GetMapping("/studentsPerformanceRanking/{dateDebut}/{dateFin}")
+    public LinkedHashMap<Float, List<Etudiant>> studentsPerformanceRanking(@PathVariable LocalDate dateDebut, @PathVariable LocalDate dateFin) {
+        return tacheService.studentsPerformanceRanking(dateDebut,dateFin);
+    }
+
+    @GetMapping("/taches/{dateDebut}/{dateFin}")
+    public Integer students(@PathVariable("dateDebut") LocalDate dateDebut, @PathVariable("dateFin") LocalDate dateFin) {
+        return tacheService.findAllStudents(dateDebut,dateFin);
+    }
+    @PostMapping("/updateNouveauMontantInscriptionDesEtudiants")
+    public void updateNouveauMontantInscriptionDesEtudiants() {
+        tacheService.updateNouveauMontantInscriptionDesEtudiants();
     }
 }

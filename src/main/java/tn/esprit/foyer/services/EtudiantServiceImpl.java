@@ -1,6 +1,7 @@
 package tn.esprit.foyer.services;
 
 
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +66,13 @@ public class EtudiantServiceImpl implements  IEtudiantService{
             throw new EntityNotFoundExceptionById("Invalid Id Etudiant was provided");
         }
             etudiantRepository.deleteById(idEtudiant);
+    }
+    public void removeEtudiant(String nom,String prenom) {
+        Etudiant etudiant = etudiantRepository.findByNomEtAndPrenomEt(nom,prenom);
+        if (etudiant!=null) {
+            etudiantRepository.deleteById(etudiant.getIdEtudiant());
+        }
+
     }
 
     @Override
