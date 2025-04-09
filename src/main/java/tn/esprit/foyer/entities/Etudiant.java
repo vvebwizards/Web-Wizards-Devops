@@ -36,13 +36,13 @@ public class Etudiant implements Serializable {
 
 
     @OneToMany(mappedBy = "etudiant")
-    List<Tache> taches;
+    private List<Tache> taches;
     Float montantInscription;
     @Enumerated(EnumType.STRING)
     TypeEtudiant typeEtudiant;
 
     @ManyToMany(mappedBy = "etudiants",fetch = FetchType.EAGER)
-    List<Reservation> reservations;
+    private List<Reservation> reservations;
 
     @OneToOne
     Tache tache;

@@ -22,10 +22,9 @@ public class EtudiantRestController {
     // http://localhost:8089/foyer/etudiant/retrieve-all-etudiants
     @GetMapping("/retrieve-all-etudiants")
     @Operation(description = "récupérer la liste des étudiants")
-    @ResponseBody
+
     public List<Etudiant> getEtudiants() {
-        List<Etudiant> listEtudiants = etudiantService.retrieveAllEtudiants();
-        return listEtudiants;
+        return etudiantService.retrieveAllEtudiants();
     }
 
     // http://localhost:8089/foyer/etudiant/retrieve-etudiant/8
@@ -39,7 +38,7 @@ public class EtudiantRestController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Etudiant not found",
                     content = @Content) })
-    @ResponseBody
+
     public Etudiant retrieveEtudiant(@Parameter(description = "id of student to be searched")
                                          @PathVariable("etudiantId") Long etudiantId) {
         return etudiantService.retrieveEtudiant(etudiantId);
@@ -48,23 +47,21 @@ public class EtudiantRestController {
     // http://localhost:8089/foyer/etudiant/add-etudiant
     @PostMapping("/add-etudiant")
     @Operation(description = "ajouter un étudiant")
-    @ResponseBody
+
     public Etudiant addEtudiant(@RequestBody Etudiant e) {
-        Etudiant etudiant= etudiantService.addEtudiant(e);
-        return etudiant;
+        return etudiantService.addEtudiant(e);
     }
 
     // http://localhost:8089/foyer/etudiant/update-etudiant
     @PutMapping("/update-etudiant")
     @Operation(description = "modifier un étudiant")
-    @ResponseBody
+
     public Etudiant updateEtudiant(@RequestBody Etudiant e) {
-        Etudiant etudiant= etudiantService.updateEtudiant(e);
-        return etudiant;
+        return etudiantService.updateEtudiant(e);
     }
     // http://localhost:8089/foyer/etudiant/removeEtudiant
     @DeleteMapping("/removeEtudiant/{idEtudiant}")
-    @ResponseBody
+
     public void removeEtudiant(@PathVariable("idEtudiant") Long idEtudiant) {
         etudiantService.removeEtudiant(idEtudiant);
     }
@@ -72,19 +69,17 @@ public class EtudiantRestController {
     // http://localhost:8089/foyer/etudiant/add-etudiants
     @PostMapping("/add-etudiants")
     @Operation(description = "ajouter une liste étudiants")
-    @ResponseBody
+
     public List<Etudiant> addEtudiants (@RequestBody List<Etudiant> etudiants) {
-        List<Etudiant> e= etudiantService.addEtudiants(etudiants);
-        return e;
+        return etudiantService.addEtudiants(etudiants);
     }
 
     // http://localhost:8089/foyer/etudiant/affecterEtudiantAReservation/test5/test5/4D84888
     @Operation(description = "assigner un étudiant à une résérvation")
     @PutMapping("/affecterEtudiantAReservation/{nomEt}/{prenomEt}/{idReservation}")
-    @ResponseBody
+
     Etudiant affecterEtudiantAReservation(@PathVariable("nomEt") String nomEt, @PathVariable("prenomEt") String prenomEt, @PathVariable("idReservation") String idReservation)
     {
-        Etudiant etudiant= etudiantService.affecterEtudiantAReservation(nomEt,prenomEt,idReservation);
-        return etudiant;
+        return etudiantService.affecterEtudiantAReservation(nomEt,prenomEt,idReservation);
     }
 }

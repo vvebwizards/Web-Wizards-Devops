@@ -28,7 +28,7 @@ public class BlocRestController {
 
     // http://localhost:8089/foyer/bloc/retrieve-all-blocs
     @GetMapping("/retrieve-all-blocs")
-    @ResponseBody
+
     public List<Bloc> getBlocs() {
         return blocService.retrieveAllBlocs();
 
@@ -36,27 +36,27 @@ public class BlocRestController {
 
     // http://localhost:8089/foyer/bloc/retrieve-bloc/8
     @GetMapping("/retrieve-bloc/{blocId}")
-    @ResponseBody
+
     public Bloc retrieveBloc(@PathVariable("blocId") Long blocId) {
         return blocService.retrieveBloc(blocId);
     }
 
     // http://localhost:8089/foyer/bloc/add-bloc
     @PostMapping("/add-bloc")
-    @ResponseBody
+
     public Bloc addBloc(@RequestBody Bloc b) {
        return blocService.addBloc(b);
     }
 
     // http://localhost:8089/foyer/bloc/update-bloc
     @PutMapping("/update-bloc")
-    @ResponseBody
+
     public Bloc updateBloc(@RequestBody Bloc b) {
         return blocService.updateBloc(b);
     }
     // http://localhost:8089/foyer/bloc/removeBloc
     @DeleteMapping("/removeBloc/{idBloc}")
-    @ResponseBody
+
     public void removeBloc(@PathVariable("idBloc") Long idBloc) {
         blocService.removeBloc(idBloc);
     }
@@ -64,7 +64,7 @@ public class BlocRestController {
 
     // http://localhost:8089/foyer/bloc/findByFoyerUniversiteIdUniversite/1
     @GetMapping("/findByFoyerUniversiteIdUniversite/{idUniversite}")
-    @ResponseBody
+
     public List<Bloc> findByFoyerUniversiteIdUniversite(@PathVariable("idUniversite") Long idUniversite) {
       return blocService.findByFoyerUniversiteIdUniversite(idUniversite);
     }
@@ -72,7 +72,7 @@ public class BlocRestController {
 
     // http://localhost:8089/foyer/bloc/affecterChambresABloc/C
     @PutMapping("/affecterChambresABloc/{nomBloc}")
-    @ResponseBody
+
     public Bloc affecterChambresABloc (@RequestBody List<Long> numChambre, @PathVariable("nomBloc") String nomBloc)
     {
         return  blocService.affecterChambresABloc(numChambre,nomBloc);

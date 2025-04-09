@@ -1,16 +1,19 @@
 package tn.esprit.foyer.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.entities.Foyer;
 import tn.esprit.foyer.repository.FoyerRepository;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Builder
 @Service
 @AllArgsConstructor
+@Slf4j
 public class FoyerService implements IFoyerService{
 
     FoyerRepository foyerRepository;
@@ -18,8 +21,7 @@ public class FoyerService implements IFoyerService{
     @Override
     public List<Foyer> retrieveAllFoyers() {
 
-        System.out.println("in method retrieveAllFoyers");
-        Foyer foyer1= Foyer.builder().capaciteFoyer(12L).nomFoyer("A").build();
+        log.info("in method retrieveAllFoyers");
         return foyerRepository.findAll();
     }
 
@@ -34,8 +36,7 @@ public class FoyerService implements IFoyerService{
     }
     @Override
     public Foyer retrieveFoyer(Long idFoyer) {
-        //return foyerRepository.findById(idFoyer).orElse(null);
-        return foyerRepository.findById(idFoyer).get();
+        return foyerRepository.findById(idFoyer).orElseThrow(() -> new EntityNotFoundException("Foyer not found with id: " + idFoyer));
     }
     @Override
     public void removeFoyer(Long idFoyer) {

@@ -1,6 +1,5 @@
 package tn.esprit.foyer.services;
 
-import tn.esprit.foyer.entities.Etudiant;
 import tn.esprit.foyer.entities.Universite;
 
 import java.util.List;

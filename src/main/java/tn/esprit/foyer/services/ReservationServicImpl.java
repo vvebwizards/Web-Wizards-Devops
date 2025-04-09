@@ -175,7 +175,10 @@ public class ReservationServicImpl implements IReservationService {
           if (chambre.getReservations() != null) {
               List<Reservation> reservations = chambre.getReservations();
               reservations.stream().forEach(reservation -> {
-                  if (reservation.getEstValid() && reservation.getAnneeUniversitaire().isAfter(dateDebut) && reservation.getAnneeUniversitaire().isBefore(dateFin)) {
+                  boolean isValidAndInCurrentYear = reservation.getEstValid() &&
+                          reservation.getAnneeUniversitaire().isAfter(dateDebut) &&
+                          reservation.getAnneeUniversitaire().isBefore(dateFin);
+                  if (isValidAndInCurrentYear) {
                       nbChambresOccupes.getAndSet(nbChambresOccupes.get() + 1);
                   }
               });
@@ -197,4 +200,5 @@ public class ReservationServicImpl implements IReservationService {
 
       return resultats;
   }
+
 }

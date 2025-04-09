@@ -8,6 +8,8 @@ import tn.esprit.foyer.entities.Universite;
 import tn.esprit.foyer.repository.FoyerRepository;
 import tn.esprit.foyer.repository.UniversiteRepository;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -59,14 +61,16 @@ public class UniversiteServiceImpl implements IUniversiteService{
 
     @Override
     public Long desaffecterFoyerAUniversite(long idFoyer) {
-        // t1 = recuperer le temps (date sys)
-        Foyer f = foyerRepository.findById(idFoyer).get();
-        f.setUniversite(null);
-        //
-        foyerRepository.save(f);
-        // t2 = recuperer le temps (date sys)
-        // te= t2-t1
+        Optional<Foyer> optionalFoyer = foyerRepository.findById(idFoyer);
 
-        return f.getIdFoyer();
+        if (optionalFoyer.isPresent()) {
+            Foyer f = optionalFoyer.get();
+            f.setUniversite(null);
+            foyerRepository.save(f);
+            return f.getIdFoyer();
+        } else {
+            throw new NoSuchElementException("Foyer not found with ID: " + idFoyer);
+        }
     }
+
 }

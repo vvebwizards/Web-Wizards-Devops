@@ -24,7 +24,8 @@ public class Chambre implements Serializable {
     TypeChambre typeC;
 
     @OneToMany(fetch = FetchType.EAGER)
-    List<Reservation> reservations;
+    @JsonIgnore
+    private List<Reservation> reservations;
     @ManyToOne
     @JsonIgnore
     Bloc bloc;

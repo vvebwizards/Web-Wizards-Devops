@@ -15,6 +15,7 @@ import tn.esprit.foyer.repository.ReservationRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -76,16 +77,25 @@ public class EtudiantServiceImpl implements  IEtudiantService{
     @Override
     public Etudiant affecterEtudiantAReservation(String nomEt, String prenomEt,
                                                  String idReservation) {
-        Etudiant e = etudiantRepository.findByNomEtAndPrenomEt( nomEt, prenomEt);
-        Reservation r = reservationRepository.findById(idReservation).orElse(null);
-           // controle de saisie +
-          List<Etudiant> etudiants = new ArrayList<>();
-        if (r.getEtudiants()!=null) {
+        Etudiant e = etudiantRepository.findByNomEtAndPrenomEt(nomEt, prenomEt);
+        Optional<Reservation> optionalReservation = reservationRepository.findById(idReservation);
+
+        if (optionalReservation.isEmpty()) {
+            throw new IllegalArgumentException("Reservation not found with ID: " + idReservation);
+        }
+
+        Reservation r = optionalReservation.get();
+        List<Etudiant> etudiants = new ArrayList<>();
+
+        if (r.getEtudiants() != null) {
             etudiants.addAll(r.getEtudiants());
         }
-            etudiants.add(e);
-            r.setEtudiants(etudiants);
-           reservationRepository.save(r);
+
+        etudiants.add(e);
+        r.setEtudiants(etudiants);
+        reservationRepository.save(r);
+
         return e;
     }
+
 }

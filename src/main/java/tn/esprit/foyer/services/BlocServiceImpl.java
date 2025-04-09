@@ -28,7 +28,7 @@ public class BlocServiceImpl implements IBlocService{
     @Override
     public Bloc addBloc(Bloc b) {
 
-        System.out.println("entrée dans la méthode addBloc sysout");
+        log.info("entrée dans la méthode addBloc sysout");
         log.trace("entrée dans la méthode addBloc logging");
         return blocRepository.save(b);
     }
@@ -52,7 +52,6 @@ public class BlocServiceImpl implements IBlocService{
 
     @Override
     public List<Bloc> findByFoyerUniversiteIdUniversite(Long idUniversite) {
-      //  return blocRepository.findByFoyerUniversiteIdUniversite(idUniversite);
           return  blocRepository.findByFoyerUniversite(idUniversite);
     }
     @Override
@@ -87,9 +86,7 @@ public class BlocServiceImpl implements IBlocService{
                      log.info("bloc : "+ bloc.getNomBloc()+ " ayant une capacité de : "+bloc.getCapaciteBloc());
                      log.info("Liste des chambres du bloc "+bloc.getNomBloc()+ " : ");
                      bloc.getChambres().stream().forEach(
-                             chambre -> {
-                                 log.info("chambre numéro "+ chambre.getNumeroChambre()+" de type "+chambre.getTypeC());
-                             }
+                             chambre -> log.info("chambre numéro "+ chambre.getNumeroChambre()+" de type "+chambre.getTypeC())
                      );
                  }
                  else

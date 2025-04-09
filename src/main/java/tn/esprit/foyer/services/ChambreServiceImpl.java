@@ -33,7 +33,7 @@ public class ChambreServiceImpl implements IChambreService {
     @Override
     public List<Chambre> retrieveAllChambres() {
 
-        System.out.println("in method retrieveAllChambres");
+        log.info("in method retrieveAllChambres");
         return chambreRepository.findAll();
     }
 
@@ -61,19 +61,16 @@ public class ChambreServiceImpl implements IChambreService {
 
     @Override
     public List<Chambre> findByTypeCAndBlocIdBloc(TypeChambre typeChambre, Long idBloc) {
-        //   return chambreRepository.findByTypeCAndBlocIdBloc(typeChambre,idBloc);
         return chambreRepository.findByTypeCAndBlocIdBloc(typeChambre, idBloc);
     }
 
     @Override
     public List<Chambre> findByReservationsEstValid(Boolean estValid) {
-        // return chambreRepository.findByReservationsEstValid(estValid);
         return chambreRepository.findByReservationsValide(estValid);
     }
 
     @Override
     public List<Chambre> findByBlocIdBlocAndBlocCapaciteBlocGreaterThan(Long idBloc, Long capaciteBloc) {
-        //   return chambreRepository.findByBlocIdBlocAndBlocCapaciteBlocGreaterThan(idBloc,capaciteBloc);
         return chambreRepository.findByBlocIdBlocAndBlocCapaciteBloc(idBloc, capaciteBloc);
     }
 

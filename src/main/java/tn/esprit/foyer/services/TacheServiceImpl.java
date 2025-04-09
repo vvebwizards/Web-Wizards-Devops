@@ -2,7 +2,6 @@ package tn.esprit.foyer.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.entities.Etudiant;
 import tn.esprit.foyer.entities.Tache;
@@ -12,6 +11,8 @@ import tn.esprit.foyer.repository.TacheRepository;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -37,8 +38,14 @@ public class TacheServiceImpl implements ITacheService{
 
     @Override
     public Tache retrieveTache(Long idTache) {
-        return tacheRepository.findById(idTache).get();
+        Optional<Tache> optionalTache = tacheRepository.findById(idTache);
+        if (optionalTache.isPresent()) {
+            return optionalTache.get();
+        } else {
+            throw new NoSuchElementException("Tache not found with ID: " + idTache);
+        }
     }
+
 
     @Override
     public void removeTache(Long idTache) {
@@ -51,10 +58,9 @@ public class TacheServiceImpl implements ITacheService{
     @Override
     public List<Tache> addTachesAndAffectToEtudiant(List<Tache> taches, String nomEt, String prenomEt) {
         Etudiant et = etudiantRepository.findByNomEtAndPrenomEt(nomEt,prenomEt);
-        taches.forEach(tache -> {
-            tache.setEtudiant(et);
-          //  tacheRepository.save(tache);
-        });
+        taches.forEach(tache ->
+            tache.setEtudiant(et)
+        );
         tacheRepository.saveAll(taches);
         return taches;
     }

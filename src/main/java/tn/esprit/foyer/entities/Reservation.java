@@ -1,6 +1,6 @@
 package tn.esprit.foyer.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
+
 import java.util.List;
 
 @Entity
@@ -23,7 +23,7 @@ import java.util.List;
 public class Reservation implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GenericGenerator(name = "uuid")
     String idReservation;
    // @Temporal(TemporalType.DATE)
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy")
@@ -31,7 +31,7 @@ public class Reservation implements Serializable {
     Boolean estValid;
     @ManyToMany()
     @JsonIgnore
-    List<Etudiant> etudiants;
+    private List<Etudiant> etudiants;
     @ManyToOne
     @JoinColumn(name = "chambre_id")
     private Chambre chambre;

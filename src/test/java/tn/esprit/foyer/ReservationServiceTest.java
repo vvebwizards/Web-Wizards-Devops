@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ReservationServiceTest {
+ class ReservationServiceTest {
 
     @Autowired
     private ReservationServicImpl reservationService;
@@ -29,7 +29,7 @@ public class ReservationServiceTest {
     private ReservationRepository reservationRepository;
 
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_MySQL() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_MySQL() {
         // Préparation des données
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(101L);
@@ -47,7 +47,7 @@ public class ReservationServiceTest {
         assertTrue(result.stream().anyMatch(s -> s.contains("101") && s.contains("1")));
     }
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_MultipleReservations() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_MultipleReservations() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(202L);
         chambre.setTypeC(TypeChambre.DOUBLE);
@@ -63,52 +63,49 @@ public class ReservationServiceTest {
 
         List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
 
-        // Since it's a DOUBLE room with two valid reservations, available places should be 0
+
         assertTrue(result.stream().anyMatch(s -> s.contains("202") && s.contains("0")));
     }
 
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_ReservationsOutsideCurrentYear() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_ReservationsOutsideCurrentYear() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(303L);
         chambre.setTypeC(TypeChambre.SIMPLE);
         chambre = chambreRepository.save(chambre);
 
-        // Reservation outside the current year
+
         Reservation reservation = new Reservation(LocalDate.of(2023, 12, 31), true);
         reservation.setChambre(chambre);
         reservationRepository.save(reservation);
 
         List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
 
-        // The reservation is outside the current year, so the room should still have 1 available place
+
         assertTrue(result.stream().anyMatch(s -> s.contains("303") && s.contains("1")));
     }
 
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_TripleRoomPartialOccupation() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_TripleRoomPartialOccupation() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(404L);
         chambre.setTypeC(TypeChambre.TRIPLE);
         chambre = chambreRepository.save(chambre);
 
-        // Adding one valid reservation (one occupied spot)
         Reservation reservation = new Reservation(LocalDate.now(), true);
         reservation.setChambre(chambre);
         reservationRepository.save(reservation);
 
         List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
 
-        // Since it's a TRIPLE room with one valid reservation, available places should be 2
         assertTrue(result.stream().anyMatch(s -> s.contains("404") && s.contains("2")));
     }
 
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_NoReservations() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_NoReservations() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(505L);
         chambre.setTypeC(TypeChambre.DOUBLE);
-        chambre = chambreRepository.save(chambre);
 
         List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
         
