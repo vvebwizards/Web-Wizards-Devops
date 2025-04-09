@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
- class ReservationServiceTest {
+public class ReservationServiceTest {
 
     @Autowired
     private ReservationServicImpl reservationService;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
     private ReservationRepository reservationRepository;
 
     @Test
-     void testNbPlacesDisponibleParChambreAnneeEnCours_MySQL() {
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_MySQL() {
         // Préparation des données
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(101L);
@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.*;
         assertTrue(result.stream().anyMatch(s -> s.contains("101") && s.contains("1")));
     }
     @Test
-     void testNbPlacesDisponibleParChambreAnneeEnCours_MultipleReservations() {
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_MultipleReservations() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(202L);
         chambre.setTypeC(TypeChambre.DOUBLE);
@@ -68,7 +68,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     @Test
-     void testNbPlacesDisponibleParChambreAnneeEnCours_ReservationsOutsideCurrentYear() {
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_ReservationsOutsideCurrentYear() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(303L);
         chambre.setTypeC(TypeChambre.SIMPLE);
@@ -86,7 +86,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     @Test
-     void testNbPlacesDisponibleParChambreAnneeEnCours_TripleRoomPartialOccupation() {
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_TripleRoomPartialOccupation() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(404L);
         chambre.setTypeC(TypeChambre.TRIPLE);
@@ -102,10 +102,11 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     @Test
-     void testNbPlacesDisponibleParChambreAnneeEnCours_NoReservations() {
+    public void testNbPlacesDisponibleParChambreAnneeEnCours_NoReservations() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(505L);
         chambre.setTypeC(TypeChambre.DOUBLE);
+        chambre = chambreRepository.save(chambre);
 
         List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
         
