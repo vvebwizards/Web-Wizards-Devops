@@ -1,8 +1,20 @@
 FROM maven:3.8.4-openjdk-17
+
 WORKDIR /foyer
 EXPOSE 8083
+
 ARG NEXUS_USERNAME
 ARG NEXUS_PASSWORD
 ARG NEXUS_URL
-RUN curl -L -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" -o foyer-3.0.0.jar "${NEXUS_URL}"
-ENTRYPOINT ["java","-jar","foyer-3.0.0.jar"]
+
+RUN if [ -n "$NEXUS_URL" ]; then \
+      echo "Downloading from Nexus..."; \
+      curl -L -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" -o foyer.jar "${NEXUS_URL}"; \
+    else \
+      echo "No Nexus URL provided, expecting local jar to be added later."; \
+    fi
+
+ADD target/foyer-3.0.0.jar foyer.jar
+
+ENTRYPOINT ["java", "-jar", "foyer.jar"]
+ que pense tu de ce code
