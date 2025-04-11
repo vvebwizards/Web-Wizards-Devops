@@ -17,4 +17,3 @@ RUN if [ -n "$NEXUS_URL" ]; then \
 ADD target/foyer-3.0.0.jar foyer.jar
 
 ENTRYPOINT ["java", "-jar", "foyer.jar"]
- que pense tu de ce code
