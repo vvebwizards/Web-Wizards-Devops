@@ -121,47 +121,6 @@ public class ReservationServicImpl implements IReservationService {
         return reservationRepository.findByAnneeUniversitaireBetween(dateDebut,dateFin);
     }
 
-  //  @Scheduled(fixedRate = 60000)
-//    public void nbPlacesDisponibleParChambreAnneeEnCours() {
-//        LocalDate currentdate = LocalDate.now();
-//        LocalDate dateDebut = LocalDate.of(currentdate.getYear(),12,31);
-//        LocalDate dateFin = LocalDate.of(currentdate.getYear(),1,1);
-//        List<Chambre> chambresDisponibles = chambreRepository.findAll();
-//        chambresDisponibles.forEach(
-//                chambre -> {
-//         //       AtomicReference<Integer> nbChambresOccupes = new AtomicReference<>(0);
-//                  AtomicReference<Integer> nbChambresOccupes = new AtomicReference<>(0);
-//
-//                    if(chambre.getReservations()!=null)
-//                    {
-//                        List<Reservation> reservations = chambre.getReservations();
-//                        reservations.stream().forEach(
-//                                reservation -> {
-//                                    if (reservation.getEstValid() && reservation.getAnneeUniversitaire().isAfter(dateDebut) && reservation.getAnneeUniversitaire().isBefore(dateFin))
-//                                       nbChambresOccupes.getAndSet(nbChambresOccupes.get() + 1);
-//                                }
-//                        );
-//                    }
-//                    if(chambre.getTypeC().equals(TypeChambre.SIMPLE))
-//                    {
-//                     log.info("nb places restantes en "+currentdate.getYear()+" pour la chambre "+chambre.getNumeroChambre()
-//                     + " est égale à " + (1- nbChambresOccupes.get()));
-//                    }
-//                    else  if(chambre.getTypeC().equals(TypeChambre.DOUBLE)){
-//                        log.info("nb places restantes en "+currentdate.getYear()+" pour la chambre "+chambre.getNumeroChambre()
-//                                + " est égale à " + (2- nbChambresOccupes.get()));
-//                    }
-//                    else { // cas triple
-//                        log.info("nb places restantes en "+currentdate.getYear()+ " pour la chambre "+chambre.getNumeroChambre()
-//                                + " est égale à " + (3- nbChambresOccupes.get()));
-//                    }
-//
-//
-//
-//                }
-//        );
-//
-//    }
   public List<String> nbPlacesDisponibleParChambreAnneeEnCours() {
       LocalDate currentdate = LocalDate.now();
       LocalDate dateDebut = LocalDate.of(currentdate.getYear(), 1, 1); // Début de l'année

@@ -9,7 +9,6 @@ import tn.esprit.foyer.entities.Chambre;
 import tn.esprit.foyer.entities.Reservation;
 import tn.esprit.foyer.entities.TypeChambre;
 import tn.esprit.foyer.repository.ChambreRepository;
-import tn.esprit.foyer.repository.ReservationRepository;
 import tn.esprit.foyer.services.ReservationServicImpl;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ReservationServiceMockitoTest {
+ class ReservationServiceMockitoTest {
 
     @InjectMocks
     private ReservationServicImpl reservationService;
@@ -28,7 +27,7 @@ public class ReservationServiceMockitoTest {
 
 
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_Mockito() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_Mockito() {
 
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(101L);
@@ -47,7 +46,7 @@ public class ReservationServiceMockitoTest {
         assertTrue(result.stream().anyMatch(s -> s.contains("101") && s.contains("1")));
     }
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_MultipleReservations_Mockito() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_MultipleReservations_Mockito() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(606L);
         chambre.setTypeC(TypeChambre.TRIPLE);
@@ -64,7 +63,7 @@ public class ReservationServiceMockitoTest {
     }
 
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_InvalidReservations_Mockito() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_InvalidReservations_Mockito() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(707L);
         chambre.setTypeC(TypeChambre.SIMPLE);
@@ -80,7 +79,7 @@ public class ReservationServiceMockitoTest {
     }
 
     @Test
-    public void testNbPlacesDisponibleParChambreAnneeEnCours_OldReservations_Mockito() {
+     void testNbPlacesDisponibleParChambreAnneeEnCours_OldReservations_Mockito() {
         Chambre chambre = new Chambre();
         chambre.setNumeroChambre(808L);
         chambre.setTypeC(TypeChambre.DOUBLE);
