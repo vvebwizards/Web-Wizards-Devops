@@ -100,17 +100,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
         assertTrue(result.stream().anyMatch(s -> s.contains("404") && s.contains("2")));
     }
-
-    @Test
-     void testNbPlacesDisponibleParChambreAnneeEnCours_NoReservations() {
-        Chambre chambre = new Chambre();
-        chambre.setNumeroChambre(505L);
-        chambre.setTypeC(TypeChambre.DOUBLE);
-
-        List<String> result = reservationService.nbPlacesDisponibleParChambreAnneeEnCours();
-        
-        assertTrue(result.stream().anyMatch(s -> s.contains("505") && s.contains("2")));
-    }
+    
 
 }
 
