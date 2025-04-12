@@ -2,11 +2,9 @@ package tn.esprit.foyer.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.entities.Bloc;
 import tn.esprit.foyer.entities.Chambre;
-import tn.esprit.foyer.entities.Foyer;
 import tn.esprit.foyer.entities.TypeChambre;
 import tn.esprit.foyer.repository.BlocRepository;
 import tn.esprit.foyer.repository.ChambreRepository;
