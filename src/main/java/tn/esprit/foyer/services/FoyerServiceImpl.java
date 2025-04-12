@@ -31,7 +31,7 @@ public class FoyerServiceImpl implements  IFoyerService{
     @Override
     public Foyer addFoyerWithBloc(Foyer f) {
 
-        Foyer foyer = foyerRepository.save(f);
+        var foyer = foyerRepository.save(f);
         f.getBlocs().forEach(bloc ->
         {
             bloc.setFoyer(foyer);

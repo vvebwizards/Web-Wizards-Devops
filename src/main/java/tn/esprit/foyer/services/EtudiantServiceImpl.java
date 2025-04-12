@@ -2,9 +2,7 @@ package tn.esprit.foyer.services;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.configuration.EntityNotFoundExceptionById;
 import tn.esprit.foyer.entities.Etudiant;
@@ -77,14 +75,14 @@ public class EtudiantServiceImpl implements  IEtudiantService{
     @Override
     public Etudiant affecterEtudiantAReservation(String nomEt, String prenomEt,
                                                  String idReservation) {
-        Etudiant e = etudiantRepository.findByNomEtAndPrenomEt(nomEt, prenomEt);
+        var e = etudiantRepository.findByNomEtAndPrenomEt(nomEt, prenomEt);
         Optional<Reservation> optionalReservation = reservationRepository.findById(idReservation);
 
         if (optionalReservation.isEmpty()) {
             throw new IllegalArgumentException("Reservation not found with ID: " + idReservation);
         }
 
-        Reservation r = optionalReservation.get();
+        var r = optionalReservation.get();
         List<Etudiant> etudiants = new ArrayList<>();
 
         if (r.getEtudiants() != null) {

@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class OpenAPIConfig {
     @Bean
     public OpenAPI openApiInformation() {
-        Contact contact = new Contact().email("springdoc@gmail.com").name("ghassen hammouda");
-        Info info = new Info().contact(contact).description("Spring Boot Foyer Project")
+        var contact = new Contact().email("springdoc@gmail.com").name("ghassen hammouda");
+        var info = new Info().contact(contact).description("Spring Boot Foyer Project")
                 .summary("Manage Application with web services for ASI II Course")
                 .title("Study Case Foyer").version("1.0.0")
                 .license(new License().name("Apache 2.0").url("http://springdoc.org"));

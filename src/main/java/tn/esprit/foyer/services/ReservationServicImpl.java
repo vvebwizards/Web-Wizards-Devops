@@ -3,7 +3,6 @@ package tn.esprit.foyer.services;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.entities.Chambre;
 import tn.esprit.foyer.entities.Etudiant;
@@ -55,10 +54,10 @@ public class ReservationServicImpl implements IReservationService {
     @Transactional
     public Reservation ajouterReservationEtAssignerAChambreEtAEtudiant(Reservation res, Long numChambre, long cin) {
 
-        LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), 1, 1);
-        LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), 12, 31);
-        Etudiant e = etudiantRepository.findByCin(cin);
-        Chambre c = chambreRepository.findByNumeroChambre(numChambre);
+        var startDate = LocalDate.of(LocalDate.now().getYear(), 1, 1);
+        var endDate = LocalDate.of(LocalDate.now().getYear(), 12, 31);
+        var e = etudiantRepository.findByCin(cin);
+        var c = chambreRepository.findByNumeroChambre(numChambre);
         // id selon la convention demandé
         res.setIdReservation(numChambre + e.getCin().toString() + LocalDate.now().getYear());
         res.setEstValid(true);
@@ -74,14 +73,14 @@ public class ReservationServicImpl implements IReservationService {
             switch (reservationSize) {
                 case 0:
                     log.info("case reservation vide");
-                    Reservation r = reservationRepository.save(res);
+                    var r = reservationRepository.save(res);
                     c.getReservations().add(r);
                     chambreRepository.save(c);
                     break;
                 case 1:
                     log.info("case reservation courante egale à 1");
                     if (c.getTypeC().equals(TypeChambre.DOUBLE) || c.getTypeC().equals(TypeChambre.TRIPLE)) {
-                        Reservation r1 = reservationRepository.save(res); // on peut affecter des reservations a la chambre sans la sauvegarder
+                        var r1 = reservationRepository.save(res); // on peut affecter des reservations a la chambre sans la sauvegarder
                         c.getReservations().add(r1);
                         chambreRepository.save(c);
 
@@ -93,7 +92,7 @@ public class ReservationServicImpl implements IReservationService {
                 case 2:
                     log.info("case reservation courante egale à 2");
                     if (c.getTypeC().equals(TypeChambre.TRIPLE)) {
-                        Reservation r2 = reservationRepository.save(res); // on peut affecter des reservations a la cambre sans la sauvegarder
+                        var r2 = reservationRepository.save(res); // on peut affecter des reservations a la cambre sans la sauvegarder
                         c.getReservations().add(r2);
                         chambreRepository.save(c);
 
@@ -107,7 +106,7 @@ public class ReservationServicImpl implements IReservationService {
                     log.info("Capacité chambre atteinte");
             }
         } else {
-            Reservation r = reservationRepository.save(res);
+            var r = reservationRepository.save(res);
             List<Reservation> reservations = new ArrayList<>();
             reservations.add(r);
             c.setReservations(reservations);
@@ -122,9 +121,9 @@ public class ReservationServicImpl implements IReservationService {
     }
 
   public List<String> nbPlacesDisponibleParChambreAnneeEnCours() {
-      LocalDate currentdate = LocalDate.now();
-      LocalDate dateDebut = LocalDate.of(currentdate.getYear(), 1, 1); // Début de l'année
-      LocalDate dateFin = LocalDate.of(currentdate.getYear(), 12, 31); // Fin de l'année
+      var currentdate = LocalDate.now();
+      var dateDebut = LocalDate.of(currentdate.getYear(), 1, 1); // Début de l'année
+      var dateFin = LocalDate.of(currentdate.getYear(), 12, 31); // Fin de l'année
       List<Chambre> chambresDisponibles = chambreRepository.findAll();
       List<String> resultats = new ArrayList<>();
 

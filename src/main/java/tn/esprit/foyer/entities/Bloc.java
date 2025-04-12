@@ -51,7 +51,7 @@ public class Bloc implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Bloc bloc = (Bloc) o;
+        var bloc = (Bloc) o;
         return Objects.equals(idBloc, bloc.idBloc) && Objects.equals(nomBloc, bloc.nomBloc) && Objects.equals(capaciteBloc, bloc.capaciteBloc) && Objects.equals(chambres, bloc.chambres) && Objects.equals(foyer, bloc.foyer);
     }
 

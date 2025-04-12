@@ -50,7 +50,7 @@ public class UniversiteServiceImpl implements IUniversiteService{
         // récupérer les objets à partir des primitifs
         Foyer f = foyerRepository.findById(idFoyer)
                 .orElseThrow(() -> new RuntimeException("Foyer not found with id: " + idFoyer));
-        Universite universite = universiteRepository.findByNomUniversite(nomUniversite);
+        var universite = universiteRepository.findByNomUniversite(nomUniversite);
        // identifier le parent du child
         // parent.setChild()
         f.setUniversite(universite);
@@ -65,7 +65,7 @@ public class UniversiteServiceImpl implements IUniversiteService{
         Optional<Foyer> optionalFoyer = foyerRepository.findById(idFoyer);
 
         if (optionalFoyer.isPresent()) {
-            Foyer f = optionalFoyer.get();
+            var f = optionalFoyer.get();
             f.setUniversite(null);
             foyerRepository.save(f);
             return f.getIdFoyer();

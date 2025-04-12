@@ -10,9 +10,7 @@ import tn.esprit.foyer.entities.Foyer;
 import tn.esprit.foyer.entities.TypeChambre;
 import tn.esprit.foyer.repository.BlocRepository;
 import tn.esprit.foyer.repository.ChambreRepository;
-import tn.esprit.foyer.repository.ReservationRepository;
 import tn.esprit.foyer.repository.FoyerRepository;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,9 +88,9 @@ public class ChambreServiceImpl implements IChambreService {
     @Override
     public List<Chambre> getChambresNonReserveParNomFoyerEtTypeChambre(String nomFoyer, TypeChambre type) {
         List<Chambre> chambresDisponibles = new ArrayList<>();
-        LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), 1, 1);
-        LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), 12, 31);
-        Foyer f = foyerRepository.findByNomFoyer(nomFoyer);
+        var startDate = LocalDate.of(LocalDate.now().getYear(), 1, 1);
+        var endDate = LocalDate.of(LocalDate.now().getYear(), 12, 31);
+        var f = foyerRepository.findByNomFoyer(nomFoyer);
         Optional<List<Bloc>> blocsParFoyer = Optional.ofNullable(f.getBlocs());
         if (blocsParFoyer.isPresent()) {
             blocsParFoyer.get().forEach(bloc ->

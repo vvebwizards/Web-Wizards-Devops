@@ -56,12 +56,12 @@ public class BlocServiceImpl implements IBlocService{
     }
     @Override
     public Bloc affecterChambresABloc (List<Long> numChambre, String nomBloc) {
-        Bloc bloc = blocRepository.findByNomBloc(nomBloc);
+        var bloc = blocRepository.findByNomBloc(nomBloc);
         // ou bien tu récupére la liste de tous les chambres par keyword
         // List<Chambre> findByNumChambre( numChambre); chambreRepo
         numChambre.stream().forEach(
                 chambreNumber -> {
-                    Chambre c = chambreRepository.findByNumeroChambre(chambreNumber);
+                    var c = chambreRepository.findByNumeroChambre(chambreNumber);
                     c.setBloc(bloc);
                     chambreRepository.save(c);
                 }

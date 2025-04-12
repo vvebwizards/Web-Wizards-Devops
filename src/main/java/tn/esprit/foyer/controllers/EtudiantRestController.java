@@ -78,7 +78,7 @@ public class EtudiantRestController {
     @Operation(description = "assigner un étudiant à une résérvation")
     @PutMapping("/affecterEtudiantAReservation/{nomEt}/{prenomEt}/{idReservation}")
 
-    Etudiant affecterEtudiantAReservation(@PathVariable("nomEt") String nomEt, @PathVariable("prenomEt") String prenomEt, @PathVariable("idReservation") String idReservation)
+    public Etudiant affecterEtudiantAReservation(@PathVariable("nomEt") String nomEt, @PathVariable("prenomEt") String prenomEt, @PathVariable("idReservation") String idReservation)
     {
         return etudiantService.affecterEtudiantAReservation(nomEt,prenomEt,idReservation);
     }
