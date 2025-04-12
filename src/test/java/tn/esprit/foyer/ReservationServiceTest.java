@@ -100,7 +100,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
         assertTrue(result.stream().anyMatch(s -> s.contains("404") && s.contains("2")));
     }
-    
+
 
 }
 

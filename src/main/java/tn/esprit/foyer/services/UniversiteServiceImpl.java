@@ -48,7 +48,8 @@ public class UniversiteServiceImpl implements IUniversiteService{
     @Override
     public Universite affecterFoyerAUniversite(long idFoyer, String nomUniversite) {
         // récupérer les objets à partir des primitifs
-        Foyer f = foyerRepository.findById(idFoyer).get();
+        Foyer f = foyerRepository.findById(idFoyer)
+                .orElseThrow(() -> new RuntimeException("Foyer not found with id: " + idFoyer));
         Universite universite = universiteRepository.findByNomUniversite(nomUniversite);
        // identifier le parent du child
         // parent.setChild()
