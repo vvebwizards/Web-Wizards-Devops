@@ -1,8 +1,7 @@
 // src/services/blocService.js
 
-const API_BASE_URL = "/bloc"; // Adjust if your proxy/rewrite is different.
+const API_BASE_URL = "/bloc"; // With Vite proxy, this should be correct
 
-// Fetch all blocs from the backend
 export const getBlocs = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/retrieve-all-blocs`);

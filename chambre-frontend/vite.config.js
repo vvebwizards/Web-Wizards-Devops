@@ -11,6 +11,11 @@ export default defineConfig({
         target: 'http://localhost:8089/foyer',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/chambre/, '/chambre')
+      },
+      '/bloc': {
+        target: 'http://localhost:8089/foyer',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/bloc/, '/bloc')
       }
     }
   }

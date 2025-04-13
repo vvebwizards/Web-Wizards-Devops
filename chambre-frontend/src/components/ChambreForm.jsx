@@ -8,7 +8,6 @@ const ChambreForm = ({ onChambreAdded }) => {
   const [typeC, setTypeC] = useState("");
   const [selectedBlocId, setSelectedBlocId] = useState("");
   const [error, setError] = useState(null);
-
   const [blocs, setBlocs] = useState([]);
   const [loadingBlocs, setLoadingBlocs] = useState(true);
 
@@ -23,7 +22,6 @@ const ChambreForm = ({ onChambreAdded }) => {
         setLoadingBlocs(false);
       }
     };
-
     fetchBlocs();
   }, []);
 
@@ -35,10 +33,9 @@ const ChambreForm = ({ onChambreAdded }) => {
       bloc: selectedBlocId ? { idBloc: Number(selectedBlocId) } : null,
       reservations: [],
     };
-
     try {
       await addChambre(newChambre);
-      onChambreAdded(); // Let the parent component refresh list & hide form
+      onChambreAdded();
       setNumeroChambre("");
       setTypeC("");
       setSelectedBlocId("");
@@ -48,13 +45,8 @@ const ChambreForm = ({ onChambreAdded }) => {
   };
 
   return (
-    <div>
-      {error && (
-        <Alert variant="danger" className="mb-3">
-          {error}
-        </Alert>
-      )}
-
+    <>
+      {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit}>
         <FormGroup className="mb-3">
           <FormLabel>Numero Chambre</FormLabel>
@@ -101,7 +93,7 @@ const ChambreForm = ({ onChambreAdded }) => {
           Add Chambre
         </Button>
       </Form>
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 // src/App.jsx (Simplified version)
 import React from "react";
 import ChambreList from "./components/ChambreList";
+import ReactDOM from "react-dom/client";
 import { Container } from "react-bootstrap";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
