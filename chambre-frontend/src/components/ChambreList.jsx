@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { getChambres, removeChambre } from "../services/chambreService";
 import ChambreForm from "./ChambreForm";
+import UpdateChambreModal from "./UpdateChambreModal";
 import {
   Container,
   Table,
@@ -15,6 +16,8 @@ const ChambreList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [editingChambre, setEditingChambre] = useState(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   // Fetch chambres from backend
   const fetchChambres = async () => {
@@ -44,9 +47,22 @@ const ChambreList = () => {
     }
   };
 
-  // Callback for when a chambre is added from the form
+  // Callback when a new chambre is added from the form
   const handleChambreAdded = () => {
     setShowForm(false);
+    fetchChambres();
+  };
+
+  // Open the update modal with selected chambre details
+  const handleEdit = (chambre) => {
+    setEditingChambre(chambre);
+    setShowUpdateModal(true);
+  };
+
+  // Callback when update is successful
+  const handleChambreUpdated = () => {
+    setShowUpdateModal(false);
+    setEditingChambre(null);
     fetchChambres();
   };
 
@@ -97,12 +113,16 @@ const ChambreList = () => {
                 <td>{chambre.numeroChambre}</td>
                 <td>{chambre.typeC}</td>
                 <td>{chambre.reservations ? chambre.reservations.length : 0}</td>
+                <td>{chambre.bloc && chambre.bloc.idBloc ? chambre.bloc.idBloc : "N/A"}</td>
                 <td>
-                  {chambre.bloc && chambre.bloc.idBloc
-                    ? chambre.bloc.idBloc
-                    : "N/A"}
-                </td>
-                <td>
+                  <Button
+                    variant="warning"
+                    size="sm"
+                    onClick={() => handleEdit(chambre)}
+                    className="me-2"
+                  >
+                    Edit
+                  </Button>
                   <Button
                     variant="danger"
                     size="sm"
@@ -119,6 +139,16 @@ const ChambreList = () => {
 
       {!loading && chambres.length === 0 && (
         <Alert variant="warning">No chambres found.</Alert>
+      )}
+
+      {/** Update Modal */}
+      {showUpdateModal && editingChambre && (
+        <UpdateChambreModal
+          show={showUpdateModal}
+          onHide={() => setShowUpdateModal(false)}
+          chambre={editingChambre}
+          onChambreUpdated={handleChambreUpdated}
+        />
       )}
     </Container>
   );
