@@ -16,7 +16,6 @@
 <properties>
 	<java.version>17</java.version>
 	<sonar.host.url>http://172.21.0.251:9000</sonar.host.url>
-	<sonar.login>45be7bdf3022bc6e5b3bc9737642153f5fa52b53</sonar.login>
 	<sonar.projectKey>0f40376bb97d8c92e02a305501d7e4ee0d314172</sonar.projectKey>
 	<sonar.projectName>foyer</sonar.projectName>
 	<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
