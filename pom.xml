@@ -107,13 +107,10 @@
 </build>
 	<distributionManagement>
 		<repository>
-			<id>nexus</id>
-			<url>http://localhost:8081/repository/maven-releases/</url>
+			<id>nexus</id> <!-- must match the id in settings.xml -->
+			<name>Nexus Release Repository</name>
+			<url>http://localhost:8081/repository/pipeline-demo/</url>
 		</repository>
-		<snapshotRepository>
-			<id>nexus</id>
-			<url>http://localhost:8081/repository/maven-snapshots/</url>
-		</snapshotRepository>
 	</distributionManagement>
 
 </project>
