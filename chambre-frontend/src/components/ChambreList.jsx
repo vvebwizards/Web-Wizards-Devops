@@ -16,6 +16,7 @@ const ChambreList = () => {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
+  // Fetch chambres from backend
   const fetchChambres = async () => {
     try {
       const data = await getChambres();
@@ -31,6 +32,7 @@ const ChambreList = () => {
     fetchChambres();
   }, []);
 
+  // Delete a chambre
   const handleDelete = async (idChambre) => {
     if (window.confirm("Are you sure you want to delete this chambre?")) {
       try {
@@ -42,6 +44,7 @@ const ChambreList = () => {
     }
   };
 
+  // Callback for when a chambre is added from the form
   const handleChambreAdded = () => {
     setShowForm(false);
     fetchChambres();
@@ -83,7 +86,7 @@ const ChambreList = () => {
               <th>Numero Chambre</th>
               <th>Type Chambre</th>
               <th>Reservations Count</th>
-              <th>Bloc Name</th>
+              <th>Bloc ID</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -95,8 +98,8 @@ const ChambreList = () => {
                 <td>{chambre.typeC}</td>
                 <td>{chambre.reservations ? chambre.reservations.length : 0}</td>
                 <td>
-                  {chambre.bloc && chambre.bloc.nomBloc
-                    ? chambre.bloc.nomBloc
+                  {chambre.bloc && chambre.bloc.idBloc
+                    ? chambre.bloc.idBloc
                     : "N/A"}
                 </td>
                 <td>

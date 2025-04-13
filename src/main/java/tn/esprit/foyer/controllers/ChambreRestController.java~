@@ -33,9 +33,9 @@ public class ChambreRestController {
     @PostMapping("/add-chambre")
     @ResponseBody
     public Chambre addChambre(@RequestBody Chambre c) {
-        return chambreService.addChambre(c);
+        Chambre chambre= chambreService.addChambre(c);
+        return chambre;
     }
-
 
     // http://localhost:8089/foyer/chambre/update-chambre
     @PutMapping("/update-chambre")

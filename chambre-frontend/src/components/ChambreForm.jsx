@@ -1,7 +1,15 @@
+// src/components/ChambreForm.jsx
 import React, { useState, useEffect } from "react";
 import { addChambre } from "../services/chambreService";
 import { getBlocs } from "../services/blocService";
-import { Form, Button, FormGroup, FormControl, FormLabel, Alert } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  FormGroup,
+  FormControl,
+  FormLabel,
+  Alert,
+} from "react-bootstrap";
 
 const ChambreForm = ({ onChambreAdded }) => {
   const [numeroChambre, setNumeroChambre] = useState("");
@@ -11,6 +19,7 @@ const ChambreForm = ({ onChambreAdded }) => {
   const [blocs, setBlocs] = useState([]);
   const [loadingBlocs, setLoadingBlocs] = useState(true);
 
+  // Fetch available blocs on mount
   useEffect(() => {
     const fetchBlocs = async () => {
       try {
@@ -30,12 +39,15 @@ const ChambreForm = ({ onChambreAdded }) => {
     const newChambre = {
       numeroChambre: Number(numeroChambre),
       typeC: typeC,
+      // Send bloc as an object with idBloc if selected, else null.
       bloc: selectedBlocId ? { idBloc: Number(selectedBlocId) } : null,
       reservations: [],
     };
+
     try {
       await addChambre(newChambre);
       onChambreAdded();
+      // Reset form fields after successful submission.
       setNumeroChambre("");
       setTypeC("");
       setSelectedBlocId("");
@@ -47,6 +59,7 @@ const ChambreForm = ({ onChambreAdded }) => {
   return (
     <>
       {error && <Alert variant="danger">{error}</Alert>}
+
       <Form onSubmit={handleSubmit}>
         <FormGroup className="mb-3">
           <FormLabel>Numero Chambre</FormLabel>
@@ -82,11 +95,15 @@ const ChambreForm = ({ onChambreAdded }) => {
               <option value="">-- None --</option>
               {blocs.map((bloc) => (
                 <option key={bloc.idBloc} value={bloc.idBloc}>
-                  {bloc.nomBloc}
+                  {bloc.nomBloc} (ID: {bloc.idBloc})
                 </option>
               ))}
             </FormControl>
           )}
+          {/* Display the currently selected bloc ID */}
+          <small className="text-muted">
+            Selected Bloc ID: {selectedBlocId ? selectedBlocId : "None"}
+          </small>
         </FormGroup>
 
         <Button variant="success" type="submit">
