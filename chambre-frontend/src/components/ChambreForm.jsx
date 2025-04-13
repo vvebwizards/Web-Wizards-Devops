@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { addChambre } from "../services/chambreService";
 import { getBlocs } from "../services/blocService";
+import { Form, Button, FormGroup, FormControl, FormLabel, Alert } from "react-bootstrap";
 
 const ChambreForm = ({ onChambreAdded }) => {
-  // Form fields
   const [numeroChambre, setNumeroChambre] = useState("");
   const [typeC, setTypeC] = useState("");
   const [selectedBlocId, setSelectedBlocId] = useState("");
   const [error, setError] = useState(null);
 
-  // Blocs state for select dropdown
   const [blocs, setBlocs] = useState([]);
   const [loadingBlocs, setLoadingBlocs] = useState(true);
 
-  // Fetch blocs on mount
   useEffect(() => {
     const fetchBlocs = async () => {
       try {
         const blocsData = await getBlocs();
         setBlocs(blocsData);
-      } catch (error) {
-        console.error("Unable to fetch blocs:", error);
+      } catch (err) {
+        console.error("Unable to fetch blocs:", err);
       } finally {
         setLoadingBlocs(false);
       }
@@ -31,21 +29,16 @@ const ChambreForm = ({ onChambreAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Create the new chambre object.
-    // Here, the bloc is added as an object with its id.
     const newChambre = {
       numeroChambre: Number(numeroChambre),
       typeC: typeC,
-      // Set bloc with the selected bloc id if one is chosen.
       bloc: selectedBlocId ? { idBloc: Number(selectedBlocId) } : null,
-      // Leave reservations empty on create.
-      reservations: []
+      reservations: [],
     };
 
     try {
-      const added = await addChambre(newChambre);
-      onChambreAdded(added);
-      // Reset form fields after submission.
+      await addChambre(newChambre);
+      onChambreAdded(); // Let the parent component refresh list & hide form
       setNumeroChambre("");
       setTypeC("");
       setSelectedBlocId("");
@@ -56,49 +49,58 @@ const ChambreForm = ({ onChambreAdded }) => {
 
   return (
     <div>
-      <h2>Add a New Chambre</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Numero Chambre: </label>
-          <input
+      {error && (
+        <Alert variant="danger" className="mb-3">
+          {error}
+        </Alert>
+      )}
+
+      <Form onSubmit={handleSubmit}>
+        <FormGroup className="mb-3">
+          <FormLabel>Numero Chambre</FormLabel>
+          <FormControl
             type="number"
             value={numeroChambre}
             onChange={(e) => setNumeroChambre(e.target.value)}
             required
           />
-        </div>
-        <div>
-          <label>Type Chambre: </label>
-          <input
+        </FormGroup>
+
+        <FormGroup className="mb-3">
+          <FormLabel>Type Chambre</FormLabel>
+          <FormControl
             type="text"
             value={typeC}
             onChange={(e) => setTypeC(e.target.value)}
             placeholder="SIMPLE, DOUBLE, etc."
             required
           />
-        </div>
-        <div>
-          <label>Select Bloc: </label>
+        </FormGroup>
+
+        <FormGroup className="mb-3">
+          <FormLabel>Select Bloc (Optional)</FormLabel>
           {loadingBlocs ? (
-            <span>Loading blocs...</span>
+            <div>Loading blocs...</div>
           ) : (
-            <select
+            <FormControl
+              as="select"
               value={selectedBlocId}
               onChange={(e) => setSelectedBlocId(e.target.value)}
-              required
             >
-              <option value="">-- Select a Bloc --</option>
+              <option value="">-- None --</option>
               {blocs.map((bloc) => (
                 <option key={bloc.idBloc} value={bloc.idBloc}>
                   {bloc.nomBloc}
                 </option>
               ))}
-            </select>
+            </FormControl>
           )}
-        </div>
-        <button type="submit">Add Chambre</button>
-      </form>
+        </FormGroup>
+
+        <Button variant="success" type="submit">
+          Add Chambre
+        </Button>
+      </Form>
     </div>
   );
 };
