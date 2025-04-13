@@ -1,14 +1,20 @@
-// src/App.jsx (Simplified version)
+// src/App.jsx
 import React from "react";
-import ChambreList from "./components/ChambreList";
-import ReactDOM from "react-dom/client";
 import { Container } from "react-bootstrap";
+import ChambreList from "./components/ChambreList";
+import ChambreQueries from "./components/ChambreQueries"; // if you want to include queries
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ChambreList />
-  </React.StrictMode>
-);
+
+function App() {
+  return (
+    <Container fluid className="p-3">
+      <h1 className="mb-3">Chambre Management</h1>
+      <ChambreList />
+      <hr />
+      <ChambreQueries />
+    </Container>
+  );
+}
 
 export default App;
