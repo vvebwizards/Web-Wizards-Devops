@@ -8,11 +8,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: foyer
-      # Remove MYSQL_USER and MYSQL_PASSWORD when configuring root
-      # Or, if you want to allow an empty password for root:
+      # Remove MYSQL_USER and MYSQL_PASSWORD
+      # Optionally, if you want to allow an empty password (not recommended for production):
       # MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "3307:3306"   # changed to 3307 if 3306 is in use on host
+      - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 
@@ -22,7 +22,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/foyer?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_DATASOURCE_PASSWORD: rootpassword
     ports:
       - "8083:8083"
     depends_on:
