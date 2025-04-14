@@ -1,0 +1,154 @@
+package tn.esprit.foyer.services;
+
+import tn.esprit.foyer.entities.Bloc;
+import tn.esprit.foyer.entities.Chambre;
+import tn.esprit.foyer.entities.Foyer;
+import tn.esprit.foyer.entities.TypeChambre;
+import tn.esprit.foyer.repository.ChambreRepository;
+import tn.esprit.foyer.repository.FoyerRepository;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class ChambreServiceImplTest {
+
+    @InjectMocks
+    private ChambreServiceImpl chambreService;
+
+    @Mock
+    private FoyerRepository foyerRepository;
+
+    @Mock
+    private ChambreRepository chambreRepository;
+
+
+    @Test
+    public void testRetrieveAllChambres() {
+        Chambre chambre1 = new Chambre();
+        chambre1.setIdChambre(1L);
+        chambre1.setNumeroChambre(101L);
+        chambre1.setTypeC(TypeChambre.SIMPLE);
+
+        Chambre chambre2 = new Chambre();
+        chambre2.setIdChambre(2L);
+        chambre2.setNumeroChambre(102L);
+        chambre2.setTypeC(TypeChambre.DOUBLE);
+
+        List<Chambre> chambres = Arrays.asList(chambre1, chambre2);
+        when(chambreRepository.findAll()).thenReturn(chambres);
+
+        List<Chambre> result = chambreService.retrieveAllChambres();
+
+        assertEquals(2, result.size());
+        assertEquals(1L, result.get(0).getIdChambre());
+        assertEquals(2L, result.get(1).getIdChambre());
+    }
+
+    @Test
+    public void testRetrieveChambre() {
+        Chambre chambre = new Chambre();
+        chambre.setIdChambre(5L);
+        chambre.setNumeroChambre(105L);
+        chambre.setTypeC(TypeChambre.SIMPLE);
+        when(chambreRepository.findById(5L)).thenReturn(Optional.of(chambre));
+
+        Chambre result = chambreService.retrieveChambre(5L);
+        assertEquals(5L, result.getIdChambre());
+    }
+
+    @Test
+    public void testAddChambre() {
+        Chambre chambre = new Chambre();
+        chambre.setNumeroChambre(106L);
+        chambre.setTypeC(TypeChambre.DOUBLE);
+
+        Chambre savedChambre = new Chambre();
+        savedChambre.setIdChambre(6L);
+        savedChambre.setNumeroChambre(106L);
+        savedChambre.setTypeC(TypeChambre.DOUBLE);
+
+        when(chambreRepository.save(chambre)).thenReturn(savedChambre);
+
+        Chambre result = chambreService.addChambre(chambre);
+        assertEquals(6L, result.getIdChambre());
+    }
+
+    @Test
+    public void testUpdateChambre() {
+        Chambre chambre = new Chambre();
+        chambre.setIdChambre(7L);
+        chambre.setNumeroChambre(107L);
+        chambre.setTypeC(TypeChambre.SIMPLE);
+
+        when(chambreRepository.save(chambre)).thenReturn(chambre);
+
+        Chambre result = chambreService.updateChambre(chambre);
+        assertEquals(7L, result.getIdChambre());
+        assertEquals(107L, result.getNumeroChambre());
+    }
+
+    @Test
+    public void testRemoveChambre() {
+        Long id = 8L;
+        // In this case, simply call the remove method and verify that deleteById() was invoked.
+        chambreService.removeChambre(id);
+        verify(chambreRepository).deleteById(id);
+    }
+
+    @Test
+    public void testFindByTypeCAndBlocIdBloc() {
+        Chambre chambre = new Chambre();
+        chambre.setIdChambre(9L);
+        chambre.setNumeroChambre(109L);
+        chambre.setTypeC(TypeChambre.SIMPLE);
+        List<Chambre> list = Arrays.asList(chambre);
+        when(chambreRepository.findByTypeCAndBlocIdBloc(TypeChambre.SIMPLE, 1L)).thenReturn(list);
+
+        List<Chambre> result = chambreService.findByTypeCAndBlocIdBloc(TypeChambre.SIMPLE, 1L);
+        assertEquals(1, result.size());
+        assertEquals(9L, result.get(0).getIdChambre());
+    }
+
+    @Test
+    public void testFindByReservationsEstValid() {
+        List<Chambre> list = Arrays.asList(new Chambre());
+        when(chambreRepository.findByReservationsEstValid(true)).thenReturn(list);
+
+        List<Chambre> result = chambreService.findByReservationsEstValid(true);
+        assertEquals(list.size(), result.size());
+    }
+
+
+
+    @Test
+    public void testGetChambresParNomBloc() {
+        List<Chambre> list = Arrays.asList(new Chambre());
+        when(chambreRepository.getChambresParNomBloc("A")).thenReturn(list);
+
+        List<Chambre> result = chambreService.getChambresParNomBloc("A");
+        assertEquals(list.size(), result.size());
+    }
+
+    @Test
+    public void testNbChambreParTypeEtBloc() {
+        when(chambreRepository.nbChambreParTypeEtBloc(TypeChambre.SIMPLE, 1L)).thenReturn(3L);
+
+        long nb = chambreService.nbChambreParTypeEtBloc(TypeChambre.SIMPLE, 1L);
+        assertEquals(3L, nb);
+    }
+}
