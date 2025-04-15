@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test
     @DisplayName("Test GET /bloc/retrieve-all-blocs")
-    public void testGetBlocs() throws Exception {
+     void testGetBlocs() throws Exception {
         // Arrange
         Bloc bloc1 = new Bloc();
         bloc1.setIdBloc(1L);
@@ -62,7 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test
     @DisplayName("Test GET /bloc/retrieve-bloc/{blocId}")
-    public void testRetrieveBloc() throws Exception {
+     void testRetrieveBloc() throws Exception {
         // Arrange
         Bloc bloc = new Bloc();
         bloc.setIdBloc(8L);
@@ -78,7 +78,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test
     @DisplayName("Test POST /bloc/add-bloc")
-    public void testAddBloc() throws Exception {
+     void testAddBloc() throws Exception {
         // Arrange
         Bloc newBloc = new Bloc();
         newBloc.setNomBloc("New Bloc");
@@ -102,7 +102,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test
     @DisplayName("Test PUT /bloc/update-bloc")
-    public void testUpdateBloc() throws Exception {
+     void testUpdateBloc() throws Exception {
         // Arrange
         Bloc updatedBloc = new Bloc();
         updatedBloc.setIdBloc(10L);
@@ -122,7 +122,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test
     @DisplayName("Test DELETE /bloc/removeBloc/{idBloc}")
-    public void testRemoveBloc() throws Exception {
+     void testRemoveBloc() throws Exception {
         // Act & Assert
         mockMvc.perform(delete("/bloc/removeBloc/{idBloc}", 11L))
                 .andExpect(status().isOk());
@@ -133,7 +133,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test
     @DisplayName("Test GET /bloc/findByFoyerUniversiteIdUniversite/{idUniversite}")
-    public void testFindByFoyerUniversiteIdUniversite() throws Exception {
+     void testFindByFoyerUniversiteIdUniversite() throws Exception {
         // Arrange
         Bloc bloc = new Bloc();
         bloc.setIdBloc(12L);
@@ -150,7 +150,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test
     @DisplayName("Test PUT /bloc/affecterChambresABloc/{nomBloc}")
-    public void testAffecterChambresABloc() throws Exception {
+     void testAffecterChambresABloc() throws Exception {
         // Arrange
         String nomBloc = "C";
         List<Long> numChambres = Arrays.asList(101L, 102L);
