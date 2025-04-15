@@ -24,5 +24,4 @@ public interface IChambreService {
 
     List<Chambre>  getChambresNonReserveParNomFoyerEtTypeChambre( String nomFoyer,TypeChambre type) ;
 
-    void pourcentageChambreParTypeChambre();
 }

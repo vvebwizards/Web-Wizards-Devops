@@ -32,5 +32,4 @@ public interface IBlocService {
 
     Bloc affecterChambresABloc (List<Long> numChambre, String nomBloc) ;
 
-    void listeChambresParBloc();
 }

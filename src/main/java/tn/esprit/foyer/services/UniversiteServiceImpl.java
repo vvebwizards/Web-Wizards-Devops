@@ -73,7 +73,7 @@ public class UniversiteServiceImpl implements IUniversiteService {
     }
 
     @Override
-    public Long desaffecterFoyerAUniversite(long idFoyer) {
+    public void desaffecterFoyerAUniversite(long idFoyer) {
         log.info("Desaffecting Foyer with id {} from its Universite", idFoyer);
         Foyer foyer = foyerRepository.findById(idFoyer)
                 .orElseThrow(() -> new NoSuchElementException("No Foyer found with id " + idFoyer));
@@ -81,6 +81,5 @@ public class UniversiteServiceImpl implements IUniversiteService {
         foyer.setUniversite(null);
         foyerRepository.save(foyer);
         log.info("Foyer with id {} has been desaffecté from its Universite", idFoyer);
-        return foyer.getIdFoyer();
     }
 }

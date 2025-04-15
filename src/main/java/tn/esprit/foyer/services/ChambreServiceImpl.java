@@ -2,7 +2,6 @@ package tn.esprit.foyer.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.entities.Bloc;
 import tn.esprit.foyer.entities.Chambre;
@@ -14,7 +13,6 @@ import tn.esprit.foyer.repository.FoyerRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,20 +109,6 @@ public class ChambreServiceImpl implements IChambreService {
                     }));
         }
         return chambresDisponibles;
-    }
-
-  //  @Scheduled(fixedRate = 60000)
-    public void pourcentageChambreParTypeChambre() {
-        Integer nbTotalsChambres = chambreRepository.findAll().size();
-        log.info("nbTotalsChambres : " + nbTotalsChambres);
-        Arrays.stream(TypeChambre.values()).forEach(
-                typeChambre -> {
-                    Integer nbChambresParType = chambreRepository.nbChambresParType(typeChambre);
-                    Double pourcentageParType = (nbChambresParType.doubleValue() / nbTotalsChambres.doubleValue()) * 100;
-                    log.info("le pourcentage des chambres pour le type " + typeChambre + " est égale à "
-                            + pourcentageParType);
-                }
-        );
     }
 
 

@@ -2,7 +2,7 @@ package tn.esprit.foyer.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
+
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.entities.Etudiant;
 import tn.esprit.foyer.entities.Tache;
@@ -95,22 +95,4 @@ public class TacheServiceImpl implements ITacheService {
         return nouveauxMontantsInscription;
     }
 
-    // Uncomment @Scheduled if you need to enable this automatic update.
-    // @Scheduled(cron = "0 30 14 09 09 *")
-    public void updateNouveauMontantInscriptionDesEtudiants() {
-        log.info("Updating registration amounts for all etudiants");
-        etudiantRepository.findAll().forEach(etudiant -> {
-            Float montantInscription = etudiant.getMontantInscription();
-            LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), 1, 1);
-            LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), 12, 31);
-            Float montantTachesAssignesAnneeEnCours = tacheRepository.sommeTacheAnneeEncours(startDate, endDate, etudiant.getIdEtudiant());
-
-            if (montantTachesAssignesAnneeEnCours != null) {
-                montantInscription -= montantTachesAssignesAnneeEnCours;
-                etudiant.setMontantInscription(montantInscription);
-                etudiantRepository.save(etudiant);
-                log.debug("Updated Etudiant {}'s registration amount to {}", etudiant.getIdEtudiant(), montantInscription);
-            }
-        });
-    }
 }

@@ -1,6 +1,6 @@
 package tn.esprit.foyer.services;
 
-import tn.esprit.foyer.entities.Etudiant;
+
 import tn.esprit.foyer.entities.Tache;
 
 import java.util.HashMap;
@@ -17,7 +17,5 @@ public interface ITacheService {
      List<Tache>  addTachesAndAffectToEtudiant (List<Tache> taches, String nomEt, String prenomEt ) ;
 
     HashMap<String,Float > calculNouveauMontantInscriptionDesEtudiants() ;
-
-    void updateNouveauMontantInscriptionDesEtudiants();
 
 }
