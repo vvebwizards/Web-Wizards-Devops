@@ -17,8 +17,7 @@ public class ReservationRestController {
     @GetMapping("/retrieve-all-reservations")
     @ResponseBody
     public List<Reservation> getReservations() {
-        List<Reservation> listReservations = reservationService.retrieveAllReservations();
-        return listReservations;
+        return reservationService.retrieveAllReservations();
     }
 
     // http://localhost:8089/foyer/reservation/retrieve-reservation/8
@@ -32,16 +31,14 @@ public class ReservationRestController {
     @PostMapping("/add-reservation")
     @ResponseBody
     public Reservation addReservation(@RequestBody Reservation r) {
-        Reservation reservation= reservationService.addReservation(r);
-        return reservation;
+        return reservationService.addReservation(r);
     }
 
     // http://localhost:8089/foyer/reservation/update-reservation
     @PutMapping("/update-reservation")
     @ResponseBody
     public Reservation updateReservation(@RequestBody Reservation r) {
-        Reservation reservation= reservationService.updateReservation(r);
-        return reservation;
+        return reservationService.updateReservation(r);
     }
     // http://localhost:8089/foyer/reservation/removeReservation
     @DeleteMapping("/removeReservation/{idReservation}")
@@ -54,8 +51,7 @@ public class ReservationRestController {
          @PostMapping("/ajouterReservationEtAssignerAChambreEtAEtudiant/{numChambre}/{cin}")
          @ResponseBody
          public Reservation ajouterReservationEtAssignerAChambreEtAEtudiant(@RequestBody Reservation r,@PathVariable("numChambre") Long numChambre,@PathVariable("cin") long cin) {
-             Reservation reservation= reservationService.ajouterReservationEtAssignerAChambreEtAEtudiant(r,numChambre,cin);
-             return reservation;
+             return reservationService.ajouterReservationEtAssignerAChambreEtAEtudiant(r,numChambre,cin);
          }
     // http://localhost:8089/foyer/reservation/getReservationParAnneeUniversitaire/2021-01-01/2021-12-31
     @GetMapping("/getReservationParAnneeUniversitaire/{dateDebut}/{dateFin}")

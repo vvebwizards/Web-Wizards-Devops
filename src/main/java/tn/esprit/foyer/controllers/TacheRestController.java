@@ -21,8 +21,7 @@ public class TacheRestController {
     @GetMapping("/retrieve-all-taches")
     @ResponseBody
     public List<Tache> getFoyers() {
-        List<Tache> listTaches = tacheService.retrieveAllTaches();
-        return listTaches;
+        return tacheService.retrieveAllTaches();
     }
 
     // http://localhost:8089/foyer/tache/retrieve-tache/8
@@ -36,8 +35,7 @@ public class TacheRestController {
     @PostMapping("/add-tache")
     @ResponseBody
     public Tache addTache(@RequestBody Tache t) {
-        Tache tache= tacheService.addTache(t);
-        return tache;
+        return tacheService.addTache(t);
     }
 
 
@@ -45,8 +43,7 @@ public class TacheRestController {
     @PutMapping("/update-tache")
     @ResponseBody
     public Tache updateTache(@RequestBody Tache t) {
-        Tache tache= tacheService.updateTache(t);
-        return tache;
+        return tacheService.updateTache(t);
     }
     // http://localhost:8089/foyer/tache/removeidTache
     @DeleteMapping("/removeTache/{idTache}")

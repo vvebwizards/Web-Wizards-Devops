@@ -7,7 +7,6 @@ import tn.esprit.foyer.entities.Bloc;
 import tn.esprit.foyer.entities.Chambre;
 import tn.esprit.foyer.entities.Foyer;
 import tn.esprit.foyer.entities.TypeChambre;
-import tn.esprit.foyer.repository.BlocRepository;
 import tn.esprit.foyer.repository.ChambreRepository;
 import tn.esprit.foyer.repository.FoyerRepository;
 
@@ -23,7 +22,7 @@ public class ChambreServiceImpl implements IChambreService {
 
     ChambreRepository chambreRepository;
 
-    BlocRepository blocRepository;
+
 
     FoyerRepository foyerRepository;
 
@@ -94,20 +93,18 @@ public class ChambreServiceImpl implements IChambreService {
         LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), 12, 31);
         Foyer f = foyerRepository.findByNomFoyer(nomFoyer);
         Optional<List<Bloc>> blocsParFoyer = Optional.ofNullable(f.getBlocs());
-        if (blocsParFoyer.isPresent()) {
-            blocsParFoyer.get().forEach(bloc ->
-                    bloc.getChambres().forEach(chambre ->
-                    {
-                        if(chambre.getTypeC().equals(type)) {
-                            Long nbReservationChambre = chambreRepository.checkNbReservationsChambre(startDate, endDate, type, chambre.getNumeroChambre());
-                            if ((chambre.getTypeC().equals(TypeChambre.SIMPLE) && nbReservationChambre == 0) ||
-                                    (chambre.getTypeC().equals(TypeChambre.DOUBLE) && nbReservationChambre < 2) ||
-                                    (chambre.getTypeC().equals(TypeChambre.TRIPLE) && nbReservationChambre < 3)){
-                                chambresDisponibles.add(chambre);
-                            }
+        blocsParFoyer.ifPresent(blocs -> blocs.forEach(bloc ->
+                bloc.getChambres().forEach(chambre ->
+                {
+                    if (chambre.getTypeC().equals(type)) {
+                        long nbReservationChambre = chambreRepository.checkNbReservationsChambre(startDate, endDate, type, chambre.getNumeroChambre());
+                        if ((chambre.getTypeC().equals(TypeChambre.SIMPLE) && nbReservationChambre == 0) ||
+                                (chambre.getTypeC().equals(TypeChambre.DOUBLE) && nbReservationChambre < 2) ||
+                                (chambre.getTypeC().equals(TypeChambre.TRIPLE) && nbReservationChambre < 3)) {
+                            chambresDisponibles.add(chambre);
                         }
-                    }));
-        }
+                    }
+                })));
         return chambresDisponibles;
     }
 
