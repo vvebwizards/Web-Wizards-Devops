@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 // Use @WebMvcTest to slice only the web layer (i.e., controllers)
 @WebMvcTest(ChambreRestController.class)
-public class ChambreRestControllerTest {
+ class ChambreRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,7 +38,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test retrieve-all-chambres endpoint")
-    public void testRetrieveAllChambres() throws Exception {
+     void testRetrieveAllChambres() throws Exception {
         // Prepare mock data
         Chambre chambre1 = new Chambre();
         chambre1.setIdChambre(1L);
@@ -65,7 +65,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test retrieve-chambre by ID endpoint")
-    public void testRetrieveChambreById() throws Exception {
+     void testRetrieveChambreById() throws Exception {
         Chambre chambre = new Chambre();
         chambre.setIdChambre(8L);
         chambre.setNumeroChambre(108L);
@@ -82,7 +82,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test add-chambre endpoint")
-    public void testAddChambre() throws Exception {
+     void testAddChambre() throws Exception {
         Chambre newChambre = new Chambre();
         newChambre.setNumeroChambre(109L);
         newChambre.setTypeC(TypeChambre.SIMPLE);
@@ -100,7 +100,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test update-chambre endpoint")
-    public void testUpdateChambre() throws Exception {
+     void testUpdateChambre() throws Exception {
         Chambre updatedChambre = new Chambre();
         updatedChambre.setIdChambre(10L);
         updatedChambre.setNumeroChambre(110L);
@@ -117,7 +117,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test removeChambre endpoint")
-    public void testRemoveChambre() throws Exception {
+     void testRemoveChambre() throws Exception {
         // You can simply simulate a successful deletion by returning nothing.
         mockMvc.perform(delete("/chambre/removeChambre/11"))
                 .andExpect(status().isOk());
@@ -127,7 +127,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test findByTypeCAndBlocIdBloc endpoint")
-    public void testFindByTypeCAndBlocIdBloc() throws Exception {
+     void testFindByTypeCAndBlocIdBloc() throws Exception {
         Chambre chambre = new Chambre();
         chambre.setIdChambre(12L);
         chambre.setNumeroChambre(112L);
@@ -144,7 +144,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test findByReservationsEstValid endpoint")
-    public void testFindByReservationsEstValid() throws Exception {
+     void testFindByReservationsEstValid() throws Exception {
         List<Chambre> chambres = Collections.singletonList(new Chambre());
         Mockito.when(chambreService.findByReservationsEstValid(true)).thenReturn(chambres);
 
@@ -154,7 +154,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test findByBlocIdBlocAndBlocCapaciteBloc endpoint")
-    public void testFindByBlocIdBlocAndBlocCapaciteBloc() throws Exception {
+     void testFindByBlocIdBlocAndBlocCapaciteBloc() throws Exception {
         List<Chambre> chambres = Collections.singletonList(new Chambre());
         Mockito.when(chambreService.findByBlocIdBlocAndBlocCapaciteBlocGreaterThan(1L, 100L)).thenReturn(chambres);
 
@@ -164,7 +164,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test getChambresParNomBloc endpoint")
-    public void testGetChambresParNomBloc() throws Exception {
+     void testGetChambresParNomBloc() throws Exception {
         List<Chambre> chambres = Collections.singletonList(new Chambre());
         Mockito.when(chambreService.getChambresParNomBloc("A")).thenReturn(chambres);
 
@@ -174,7 +174,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test nbChambreParTypeEtBloc endpoint")
-    public void testNbChambreParTypeEtBloc() throws Exception {
+     void testNbChambreParTypeEtBloc() throws Exception {
         Mockito.when(chambreService.nbChambreParTypeEtBloc(TypeChambre.DOUBLE, 1L)).thenReturn(5L);
 
         mockMvc.perform(get("/chambre/nbChambreParTypeEtBloc/DOUBLE/1"))
@@ -184,7 +184,7 @@ public class ChambreRestControllerTest {
 
     @Test
     @DisplayName("Test getChambresNonReserveParNomFoyerEtTypeChambre endpoint")
-    public void testGetChambresNonReserveParNomFoyerEtTypeChambre() throws Exception {
+     void testGetChambresNonReserveParNomFoyerEtTypeChambre() throws Exception {
         List<Chambre> chambres = Collections.singletonList(new Chambre());
         Mockito.when(chambreService.getChambresNonReserveParNomFoyerEtTypeChambre("esprit foyer", TypeChambre.SIMPLE))
                 .thenReturn(chambres);

@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BlocRestController.class)
-public class BlocRestControllerTest {
+ class BlocRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

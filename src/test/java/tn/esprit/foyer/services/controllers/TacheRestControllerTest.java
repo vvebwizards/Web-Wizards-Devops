@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TacheRestController.class)
-public class TacheRestControllerTest {
+ class TacheRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,7 +39,7 @@ public class TacheRestControllerTest {
 
     @Test
     @DisplayName("Test GET /tache/retrieve-all-taches")
-    public void testGetAllTaches() throws Exception {
+     void testGetAllTaches() throws Exception {
         // Arrange
         Tache tache1 = new Tache();
         tache1.setIdTache(1L);
@@ -62,7 +62,7 @@ public class TacheRestControllerTest {
 
     @Test
     @DisplayName("Test GET /tache/retrieve-tache/{tacheId}")
-    public void testRetrieveTache() throws Exception {
+     void testRetrieveTache() throws Exception {
         // Arrange
         Tache tache = new Tache();
         tache.setIdTache(8L);
@@ -76,10 +76,10 @@ public class TacheRestControllerTest {
                 .andExpect(jsonPath("$.idTache").value(8));
     }
 
-    
+
     @Test
     @DisplayName("Test DELETE /tache/removeTache/{idTache}")
-    public void testRemoveTache() throws Exception {
+     void testRemoveTache() throws Exception {
         // Act & Assert
         mockMvc.perform(delete("/tache/removeTache/{idTache}", 11L))
                 .andExpect(status().isOk());
@@ -90,7 +90,7 @@ public class TacheRestControllerTest {
 
     @Test
     @DisplayName("Test GET /tache/calculNouveauMontantInscriptionDesEtudiants")
-    public void testCalculNouveauMontantInscriptionDesEtudiants() throws Exception {
+     void testCalculNouveauMontantInscriptionDesEtudiants() throws Exception {
         // Arrange
         HashMap<String, Float> expectedMap = new HashMap<>();
         expectedMap.put("nouvMontant", 1200.50f);

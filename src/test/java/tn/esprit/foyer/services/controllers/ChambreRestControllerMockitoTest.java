@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ChambreRestController.class)
-public class ChambreRestControllerMockitoTest {
+ class ChambreRestControllerMockitoTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,7 +38,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test GET /chambre/retrieve-all-chambres")
-    public void testGetChambres() throws Exception {
+     void testGetChambres() throws Exception {
         // Arrange
         Chambre chambre1 = new Chambre();
         chambre1.setIdChambre(1L);
@@ -66,7 +66,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test GET /chambre/retrieve-chambre/{chambreId}")
-    public void testRetrieveChambre() throws Exception {
+     void testRetrieveChambre() throws Exception {
         // Arrange
         Chambre chambre = new Chambre();
         chambre.setIdChambre(8L);
@@ -84,7 +84,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test POST /chambre/add-chambre")
-    public void testAddChambre() throws Exception {
+     void testAddChambre() throws Exception {
         // Arrange
         Chambre newChambre = new Chambre();
         newChambre.setNumeroChambre(109L);
@@ -105,7 +105,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test PUT /chambre/update-chambre")
-    public void testUpdateChambre() throws Exception {
+     void testUpdateChambre() throws Exception {
         // Arrange
         Chambre updatedChambre = new Chambre();
         updatedChambre.setIdChambre(10L);
@@ -125,7 +125,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test DELETE /chambre/removeChambre/{idChambre}")
-    public void testRemoveChambre() throws Exception {
+     void testRemoveChambre() throws Exception {
         // Act & Assert
         mockMvc.perform(delete("/chambre/removeChambre/{idChambre}", 11L))
                 .andExpect(status().isOk());
@@ -136,7 +136,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test GET /chambre/findByTypeCAndBlocIdBloc/{typeChambre}/{idBloc}")
-    public void testFindByTypeCAndBlocIdBloc() throws Exception {
+     void testFindByTypeCAndBlocIdBloc() throws Exception {
         // Arrange
         Chambre chambre = new Chambre();
         chambre.setIdChambre(12L);
@@ -154,7 +154,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test GET /chambre/findByReservationsEstValid/{estValid}")
-    public void testFindByReservationsEstValid() throws Exception {
+     void testFindByReservationsEstValid() throws Exception {
         // Arrange
         List<Chambre> chambres = Collections.singletonList(new Chambre());
         Mockito.when(chambreService.findByReservationsEstValid(true))
@@ -167,7 +167,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test GET /chambre/findByBlocIdBlocAndBlocCapaciteBloc/{idBloc}/{capaciteBloc}")
-    public void testFindByBlocIdBlocAndBlocCapaciteBloc() throws Exception {
+     void testFindByBlocIdBlocAndBlocCapaciteBloc() throws Exception {
         // Arrange
         List<Chambre> chambres = Collections.singletonList(new Chambre());
         Mockito.when(chambreService.findByBlocIdBlocAndBlocCapaciteBlocGreaterThan(1L, 100L))
@@ -180,7 +180,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test GET /chambre/getChambresParNomBloc/{nomBloc}")
-    public void testGetChambresParNomBloc() throws Exception {
+     void testGetChambresParNomBloc() throws Exception {
         // Arrange
         List<Chambre> chambres = Collections.singletonList(new Chambre());
         Mockito.when(chambreService.getChambresParNomBloc("A"))
@@ -193,7 +193,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test GET /chambre/nbChambreParTypeEtBloc/{type}/{idBloc}")
-    public void testNbChambreParTypeEtBloc() throws Exception {
+     void testNbChambreParTypeEtBloc() throws Exception {
         // Arrange
         Mockito.when(chambreService.nbChambreParTypeEtBloc(TypeChambre.DOUBLE, 1L))
                 .thenReturn(5L);
@@ -206,7 +206,7 @@ public class ChambreRestControllerMockitoTest {
 
     @Test
     @DisplayName("Test GET /chambre/getChambresNonReserveParNomFoyerEtTypeChambre/{nomFoyer}/{type}")
-    public void testGetChambresNonReserveParNomFoyerEtTypeChambre() throws Exception {
+     void testGetChambresNonReserveParNomFoyerEtTypeChambre() throws Exception {
         // Arrange
         List<Chambre> chambres = Collections.singletonList(new Chambre());
         Mockito.when(chambreService.getChambresNonReserveParNomFoyerEtTypeChambre("esprit foyer", TypeChambre.SIMPLE))
