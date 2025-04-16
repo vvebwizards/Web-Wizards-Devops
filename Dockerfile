@@ -9,7 +9,7 @@ ARG NEXUS_URL
 
 RUN if [ -n "$NEXUS_URL" ]; then \
       echo "Downloading from Nexus..."; \
-      sudo curl -L -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" -o foyer.jar "${NEXUS_URL}"; \
+      curl -L -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" -o foyer.jar "${NEXUS_URL}"; \
     else \
       echo "No Nexus URL provided, expecting local jar to be added later."; \
     fi
