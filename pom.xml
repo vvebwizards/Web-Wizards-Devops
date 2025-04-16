@@ -57,7 +57,9 @@
 			<name>Nexus Repository</name>
 			<url>http://172.21.120.96:8081/repository/maven-releases/</url>
 		</repository>
+
 	</distributionManagement>
+
 	<build>
 		<plugins>
 			<!-- Plugin Spring Boot -->
