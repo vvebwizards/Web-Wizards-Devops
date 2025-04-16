@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: soufienaessalah/devops-foyer:3.0.0
+    image: soufienessalah/devops-foyer:3.0.0
   mysql:
     image: mysql:8.0
     container_name: mysql
