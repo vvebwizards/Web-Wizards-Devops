@@ -6,6 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile
     image: soufienessalah/devops-foyer:3.0.1
+    networks:
+      - dev-network
+
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -13,13 +16,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: foyer
-      # Remove MYSQL_USER and MYSQL_PASSWORD
-      # Optionally, if you want to allow an empty password (not recommended for production):
-      # MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - dev-network
 
   backend:
     build: .
@@ -32,6 +34,8 @@ services:
       - "8083:8083"
     depends_on:
       - mysql
+    networks:
+      - dev-network
 
   frontend:
     build: ./chambre-frontend
@@ -40,6 +44,12 @@ services:
       - "80:80"
     depends_on:
       - backend
+    networks:
+      - dev-network
 
 volumes:
   mysql-data:
+
+networks:
+  dev-network:
+    driver: bridge
