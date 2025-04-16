@@ -14,6 +14,6 @@ RUN if [ -n "$NEXUS_URL" ]; then \
       echo "No Nexus URL provided, expecting local jar to be added later."; \
     fi
 
-ADD target/foyer-3.0.0.jar foyer.jar
+ADD target/4Twin4-G3-Foyer-3.0.0.jar foyer.jar
 
 ENTRYPOINT ["java", "-jar", "foyer.jar"]
