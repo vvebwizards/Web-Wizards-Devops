@@ -17,7 +17,7 @@ WORKDIR /app
 # Use a wildcard to copy the generated jar from the builder stage
 COPY --from=builder /app/target/*.jar app.jar
 
-# Expose the port your Spring Boot app runs on (8083 in your old Dockerfile)
+# Expose the port your Spring Boot app runs on (8083)
 EXPOSE 8083
 
 # Run the jar file
