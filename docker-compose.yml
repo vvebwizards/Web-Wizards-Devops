@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mysql:
-    image: mysql:latest
+    image: mysql:8.0
     container_name: mysql-test
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -14,7 +14,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - mysql_data:/var/lib/mysql
     restart: unless-stopped
+    networks:
+      - devnet
 
   backend:
     image: spring-boot-app
@@ -31,6 +35,8 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
     restart: unless-stopped
+    networks:
+      - devnet
 
   frontend:
     image: mon-app-angular
@@ -41,15 +47,20 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - devnet
 
   sonarqube:
     image: sonarqube:8.9.7-community
     ports:
       - "9000:9000"
     volumes:
-      - SonarQube_data:/opt/sonarqube/data
-      - SonarQube_extensions:/opt/sonarqube/extensions
-      - SonarQube_logs:/opt/sonarqube/logs
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    restart: unless-stopped
+    networks:
+      - devnet
 
   nexus:
     image: sonatype/nexus3
@@ -57,9 +68,18 @@ services:
       - "8081:8081"
     volumes:
       - nexus_data:/nexus-data
+    restart: unless-stopped
+    networks:
+      - devnet
 
 volumes:
-  SonarQube_data:
-  SonarQube_extensions:
-  SonarQube_logs:
+  mysql_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
   nexus_data:
+
+
+networks:
+  devnet:
+    driver: bridge
