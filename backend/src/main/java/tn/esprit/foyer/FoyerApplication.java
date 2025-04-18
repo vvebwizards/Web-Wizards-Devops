@@ -23,7 +23,7 @@ public class FoyerApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:4200")
+						.allowedOrigins("http://172.21.0.251:4200")
 						.allowedMethods("*");
 			}
 		};
