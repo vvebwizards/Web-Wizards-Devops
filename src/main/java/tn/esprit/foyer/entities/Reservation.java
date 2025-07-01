@@ -18,16 +18,18 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Reservation implements Serializable {
+
     @Id
-    @Column(name="idReservation",length = 50)
+    @Column(name = "idReservation", length = 50)
     String idReservation; // Clé primaire
-   // @Temporal(TemporalType.DATE)
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy")
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy")
     LocalDate anneeUniversitaire;
+
     Boolean estValid;
-    @ManyToMany()
+
+    @ManyToMany
     @JsonIgnore
-    private List<Etudiant> etudiants;
+    List<Etudiant> etudiants;
 
 }
-

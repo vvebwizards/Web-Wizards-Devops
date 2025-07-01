@@ -1,6 +1,7 @@
 package tn.esprit.foyer.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -31,8 +32,10 @@ public class Chambre implements Serializable {
     @OneToMany(fetch = FetchType.EAGER)
     List<Reservation> reservations;
     @ManyToOne
-    @JsonIgnore
-    Bloc bloc;
+    @JoinColumn(name = "bloc_id_bloc") // Ensure this matches your DB column name
+    @JsonIgnoreProperties(value = {"chambres"}, allowSetters = true)
+    private Bloc bloc;
+
 
 
 }

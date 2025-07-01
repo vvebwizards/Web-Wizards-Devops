@@ -13,37 +13,15 @@ import java.util.List;
 public interface ChambreRepository extends JpaRepository<Chambre, Long> {
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
  //2.   Liste des chambres double d'un bloc donnée
     List<Chambre> findByTypeCAndBlocIdBloc(TypeChambre typeChambre, Long idBloc);
-
-  //  3. Liste des chambres avec des réservations valide ou pas  (le paramètre à envoyé est le boolean estValide)
-
-    List<Chambre> findByReservationsEstValid(Boolean estValid);
-
-  //  4. Liste des chambres appartenant à  un bloc donné avec une capacité supérieur à un nombre donnée envoyé en paramètre
-
-    List<Chambre> findByBlocIdBlocAndBlocCapaciteBlocGreaterThan(Long idBloc, Long capaciteBloc);
-
 
     Chambre findByNumeroChambre(Long numeroChambre);
 
     List<Chambre>  findByBlocNomBloc(String nomBloc);
 
-    @Query("SELECT c FROM Chambre c where c.bloc.nomBloc=:n")
-   List<Chambre>  getChambresParNomBloc(@Param("n") String nomBloc);
+
+
 
 
 
@@ -80,10 +58,6 @@ public interface ChambreRepository extends JpaRepository<Chambre, Long> {
 
 
 
-
-    //2.Liste des chambres double d'un bloc donnée
-    @Query("select c FROM Chambre c where c.bloc.idBloc = :idBloc and c.typeC=:typeC ")
-    List<Chambre> findByTypeCAndBloc(@Param("typeC") TypeChambre typeChambre, @Param("idBloc") Long idBloc);
 
 
    // 3. Liste des chambres avec des réservations valide ou pas  (le paramètre à envoyé est le boolean estValide)

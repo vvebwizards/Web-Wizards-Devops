@@ -18,8 +18,7 @@ public class ChambreRestController {
     @GetMapping("/retrieve-all-chambres")
     @ResponseBody
     public List<Chambre> getChambres() {
-        List<Chambre> listChambres = chambreService.retrieveAllChambres();
-        return listChambres;
+        return chambreService.retrieveAllChambres();
     }
 
     // http://localhost:8089/foyer/chambre/retrieve-chambre/8
@@ -33,9 +32,9 @@ public class ChambreRestController {
     @PostMapping("/add-chambre")
     @ResponseBody
     public Chambre addChambre(@RequestBody Chambre c) {
-        Chambre chambre= chambreService.addChambre(c);
-        return chambre;
+        return chambreService.addChambre(c);
     }
+
 
     // http://localhost:8089/foyer/chambre/update-chambre
     @PutMapping("/update-chambre")
@@ -54,8 +53,7 @@ public class ChambreRestController {
     @GetMapping("/findByTypeCAndBlocIdBloc/{typeChambre}/{idBloc}")
     @ResponseBody
     public List<Chambre> findByTypeCAndBlocIdBloc(@PathVariable("typeChambre") TypeChambre t, @PathVariable("idBloc")  Long idBloc) {
-        List<Chambre> listChambresByTypeCAndBlocIdBloc = chambreService.findByTypeCAndBlocIdBloc(t,idBloc);
-        return listChambresByTypeCAndBlocIdBloc;
+        return chambreService.findByTypeCAndBlocIdBloc(t,idBloc);
     }
 
     // http://localhost:8089/foyer/chambre/findByReservationsEstValid/true

@@ -3,10 +3,7 @@ package tn.esprit.foyer.services;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tn.esprit.foyer.entities.EtatTache;
-import tn.esprit.foyer.entities.Etudiant;
-import tn.esprit.foyer.entities.Tache;
-import tn.esprit.foyer.entities.TypeTache;
+import tn.esprit.foyer.entities.*;
 import tn.esprit.foyer.repository.EtudiantRepository;
 import tn.esprit.foyer.repository.TacheRepository;
 
@@ -17,210 +14,157 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class TacheServiceImpl implements ITacheService{
+public class TacheServiceImpl implements ITacheService {
 
-    TacheRepository tacheRepository;
-    EtudiantRepository etudiantRepository;
+    private final TacheRepository tacheRepository;
+    private final EtudiantRepository etudiantRepository;
+
     @Override
     public List<Tache> retrieveAllTaches() {
+        log.info("Retrieving all Taches");
         return tacheRepository.findAll();
     }
 
     @Override
     public Tache addTache(Tache t) {
+        log.info("Adding new Tache");
         return tacheRepository.save(t);
     }
 
     @Override
     public Tache updateTache(Tache t) {
+        log.info("Updating Tache with id {}", t.getIdTache());
         return tacheRepository.save(t);
     }
 
     @Override
     public Tache retrieveTache(Long idTache) {
+        log.info("Retrieving Tache with id {}", idTache);
         return tacheRepository.findById(idTache)
-                .orElseThrow(() -> new RuntimeException("Tache non trouvée avec l'ID : " + idTache));
+                .orElseThrow(() -> new NoSuchElementException("No Tache found with id " + idTache));
     }
-
 
     @Override
     public void removeTache(Long idTache) {
+        log.info("Removing Tache with id {}", idTache);
         tacheRepository.deleteById(idTache);
     }
 
     @Override
     public void removeTachesByEtudiant(String nom, String prenom) {
-       List<Tache> taches = tacheRepository.findTacheByEtudiant(nom,prenom);
+        List<Tache> taches = tacheRepository.findTacheByEtudiant(nom, prenom);
         tacheRepository.deleteAll(taches);
     }
 
-
-    public Integer findAllStudents(LocalDate dateDebut,LocalDate dateFin) {
-        List<Tache> tacheList= tacheRepository.findAll();
-        for (Tache tache : tacheList) {
-            LocalDate dateFinTache = tache.getDateTache().plusDays(tache.getDuree());
-
-            if (!tache.getDateTache().isBefore(dateDebut) && !dateFinTache.isAfter(dateFin)) {
-                log.info("dateeeeeeeeeeeeeeeeeeeeeeeeeeeeee compar",tache.getDateTache().isBefore(dateDebut));
-                return 1;
-
-            }
-        }
-        return 0;
-    }
     @Override
     public List<Tache> addTachesAndAffectToEtudiant(List<Tache> taches, String nomEt, String prenomEt) {
-        Etudiant et = etudiantRepository.findByNomEtAndPrenomEt(nomEt,prenomEt);
-        taches.forEach(tache ->
-            tache.setEtudiant(et));
-        tacheRepository.saveAll(taches);
-        return taches;
+        Etudiant et = etudiantRepository.findByNomEtAndPrenomEt(nomEt, prenomEt);
+        if (et == null) {
+            throw new NoSuchElementException("No Etudiant found with name " + nomEt + " " + prenomEt);
+        }
+        taches.forEach(tache -> tache.setEtudiant(et));
+        return tacheRepository.saveAll(taches);
     }
-    public Tache findById(Long id) {
-        return tacheRepository.findById(id).orElse(null);
-    }
+
     @Override
     public HashMap<String, Float> calculNouveauMontantInscriptionDesEtudiants() {
-        HashMap<String, Float> nouveauxMontantsInscription = new HashMap<>();
+        log.info("Calculating new registration amounts for etudiants");
+        HashMap<String, Float> nouveauxMontants = new HashMap<>();
+        LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), 1, 1);
+        LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), 12, 31);
+
         etudiantRepository.findAll().forEach(etudiant -> {
-            Float ancienMontant= etudiant.getMontantInscription();
-            LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), 1,1);
-            LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), 12,31);
-            Float montantTachesAssignesAnneeEnCours = tacheRepository.
-                    sommeTacheAnneeEncours(startDate,endDate,etudiant.getIdEtudiant());
-            Float nouveauMontant = ancienMontant;
-            if (montantTachesAssignesAnneeEnCours!=null) {
-                 nouveauMontant = ancienMontant - montantTachesAssignesAnneeEnCours;
-            }
-            nouveauxMontantsInscription.put(etudiant.getNomEt()+" "+etudiant.getPrenomEt(),
-                    nouveauMontant);
+            Float ancienMontant = etudiant.getMontantInscription();
+            Float sommeTaches = tacheRepository.sommeTacheAnneeEncours(startDate, endDate, etudiant.getIdEtudiant());
+            Float nouveauMontant = (sommeTaches != null) ? ancienMontant - sommeTaches : ancienMontant;
+
+            String nomComplet = etudiant.getNomEt() + " " + etudiant.getPrenomEt();
+            nouveauxMontants.put(nomComplet, nouveauMontant);
+            log.debug("Étudiant {}: ancien={}, tâches={}, nouveau={}", nomComplet, ancienMontant, sommeTaches, nouveauMontant);
         });
-        return nouveauxMontantsInscription;
+
+        return nouveauxMontants;
     }
 
-    //@Scheduled(cron = "0 30 14 09 09 *")
+    @Override
     public void updateNouveauMontantInscriptionDesEtudiants() {
-        etudiantRepository.findAll().forEach(etudiant -> {
-            Float montantInscription= etudiant.getMontantInscription();
-            LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), 1,1);
-            LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), 12,31);
-            Float montantTachesAssignesAnneeEnCours = tacheRepository.sommeTacheAnneeEncours(startDate,endDate,etudiant.getIdEtudiant());
-            if (montantTachesAssignesAnneeEnCours!=null) {
-                montantInscription = montantInscription - montantTachesAssignesAnneeEnCours;
-                etudiant.setMontantInscription(montantInscription);
-                etudiantRepository.save(etudiant);
+        calculNouveauMontantInscriptionDesEtudiants().forEach((nom, montant) -> {
+            String[] split = nom.split(" ");
+            Etudiant et = etudiantRepository.findByNomEtAndPrenomEt(split[0], split[1]);
+            if (et != null) {
+                et.setMontantInscription(montant);
+                etudiantRepository.save(et);
             }
-
         });
     }
+
+    public Integer findAllStudents(LocalDate dateDebut, LocalDate dateFin) {
+        return (int) tacheRepository.findAll().stream()
+                .filter(t -> {
+                    LocalDate fin = t.getDateTache().plusDays(t.getDuree());
+                    return !t.getDateTache().isBefore(dateDebut) && !fin.isAfter(dateFin);
+                }).count();
+    }
+
     @Override
     public float studentsEfficacity(Etudiant etudiant, LocalDate dateDebut, LocalDate dateFin) {
-        List<Tache> tacheListTerminé = tacheRepository.findAllByEtatTacheAndEtudiant(etudiant, EtatTache.TERMINE);
-        List<Tache> tacheListPlanifie = tacheRepository.findAllByEtatTacheAndEtudiant(etudiant, EtatTache.PLANIFIE);
+        List<Tache> terminees = tacheRepository.findAllByEtatTacheAndEtudiant(etudiant, EtatTache.TERMINE);
+        List<Tache> planifiees = tacheRepository.findAllByEtatTacheAndEtudiant(etudiant, EtatTache.PLANIFIE);
 
-        float totalTachesPlanifie = 0;
-        float tachesCompletees = 0;
+        long total = planifiees.stream()
+                .filter(t -> !t.getDateTache().isBefore(dateDebut) && !t.getDateTache().plusDays(t.getDuree()).isAfter(dateFin))
+                .count();
 
-        for (Tache task : tacheListPlanifie) {
-            LocalDate dateFinTache = task.getDateTache().plusDays(task.getDuree());
-            if (!task.getDateTache().isBefore(dateDebut) && !dateFinTache.isAfter(dateFin)) {
-                totalTachesPlanifie++;
-            }
-        }
-        for (Tache task : tacheListTerminé) {
-            LocalDate dateFinTache = task.getDateTache().plusDays(task.getDuree());
-            if (!task.getDateTache().isBefore(dateDebut) && !dateFinTache.isAfter(dateFin)) {
-                tachesCompletees++;
-            }
-        }
-        if (totalTachesPlanifie == 0) {
-            return 0;
-        }
+        long completes = terminees.stream()
+                .filter(t -> !t.getDateTache().isBefore(dateDebut) && !t.getDateTache().plusDays(t.getDuree()).isAfter(dateFin))
+                .count();
 
-        return (tachesCompletees / totalTachesPlanifie) * 100;
+        return total == 0 ? 0 : (completes * 100f / total);
     }
 
     @Override
     public float studentRevenu(Etudiant etudiant, LocalDate dateDebut, LocalDate dateFin) {
-        List<Tache> tasks = tacheRepository.findAllByEtatTacheAndEtudiant(etudiant, EtatTache.TERMINE);
-        float totalRevenue = 0;
-
-        for (Tache task : tasks) {
-            LocalDate dateFinTache = task.getDateTache().atStartOfDay().plusHours(task.getDuree()).toLocalDate();
-            if (!task.getDateTache().isBefore(dateDebut) && !dateFinTache.isAfter(dateFin) ) {
-                totalRevenue += task.getTarifHoraire() * task.getDuree();
-                log.info("revenu resultttttttt: {}", totalRevenue);
-            }
-        }
-
-        return totalRevenue;
+        return (float) tacheRepository.findAllByEtatTacheAndEtudiant(etudiant, EtatTache.TERMINE).stream()
+                .filter(t -> !t.getDateTache().isBefore(dateDebut) && !t.getDateTache().plusDays(t.getDuree()).isAfter(dateFin))
+                .mapToDouble(t -> t.getTarifHoraire() * t.getDuree())
+                .sum();
     }
 
     @Override
     public float studentVersatility(Etudiant etudiant, LocalDate dateDebut, LocalDate dateFin) {
-        List<Tache> tacheList = tacheRepository.findAllByEtatTacheAndEtudiant(etudiant, EtatTache.TERMINE);
+        Set<TypeTache> typesFaits = tacheRepository.findAllByEtatTacheAndEtudiant(etudiant, EtatTache.TERMINE).stream()
+                .filter(t -> !t.getDateTache().isBefore(dateDebut) && !t.getDateTache().plusDays(t.getDuree()).isAfter(dateFin))
+                .map(Tache::getTypeTache)
+                .collect(Collectors.toSet());
 
-        float nbTacheMenagere = 0;
-        float nbTacheJardinage = 0;
-        float nbTacheBricolage = 0;
-
-        for (Tache tache : tacheList) {
-            LocalDate dateFinTache = tache.getDateTache().atStartOfDay().plusHours(tache.getDuree()).toLocalDate();
-            if (!tache.getDateTache().isBefore(dateDebut) && !dateFinTache.isAfter(dateFin)) {
-                if (tache.getTypeTache() == TypeTache.MENAGERE) {
-                    nbTacheMenagere++;
-                } else if (tache.getTypeTache() == TypeTache.JARDINAGE) {
-                    nbTacheJardinage++;
-                } else if (tache.getTypeTache() == TypeTache.BRICOLAGE) {
-                    nbTacheBricolage++;
-                }
-            }
-        }
-
-        float totalTypesPerformed = 0;
-        if (nbTacheMenagere > 0) totalTypesPerformed++;
-        if (nbTacheJardinage > 0) totalTypesPerformed++;
-        if (nbTacheBricolage > 0) totalTypesPerformed++;
-
-        return (totalTypesPerformed / 3.0f) * 100;
+        return (typesFaits.size() / 3.0f) * 100;
     }
 
-    public float studentPerformance(Etudiant etudiant, LocalDate dateDebut, LocalDate dateFin) {
-        float efficacity = this.studentsEfficacity(etudiant, dateDebut, dateFin);
-        float revenu = this.studentRevenu(etudiant, dateDebut, dateFin);
-        float versatility = this.studentVersatility(etudiant, dateDebut, dateFin);
-
-        log.info("Efficiency result: {}", efficacity);
-
-        log.info("revenu result: {}", revenu);
-        float result=efficacity + revenu + versatility;
-        log.info("Versatility result: {}", result);
-        return result;
+    private float studentPerformance(Etudiant e, LocalDate start, LocalDate end) {
+        float e1 = studentsEfficacity(e, start, end);
+        float e2 = studentRevenu(e, start, end);
+        float e3 = studentVersatility(e, start, end);
+        return e1 + e2 + e3;
     }
-
 
     @Override
     public LinkedHashMap<Float, List<Etudiant>> studentsPerformanceRanking(LocalDate dateDebut, LocalDate dateFin) {
-        List<Etudiant> etudiants = etudiantRepository.findAll();
         Map<Float, List<Etudiant>> performanceMap = new HashMap<>();
 
-        for (Etudiant etudiant : etudiants) {
-            float performance = this.studentPerformance(etudiant, dateDebut, dateFin);
-            performanceMap.computeIfAbsent(performance, k -> new ArrayList<>())
-                    .add(etudiant);
+        for (Etudiant etudiant : etudiantRepository.findAll()) {
+            float performance = studentPerformance(etudiant, dateDebut, dateFin);
+            performanceMap.computeIfAbsent(performance, k -> new ArrayList<>()).add(etudiant);
         }
 
-        return performanceMap.entrySet()
-                .stream()
+        return performanceMap.entrySet().stream()
                 .sorted(Map.Entry.<Float, List<Etudiant>>comparingByKey().reversed())
                 .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
+                        Map.Entry::getKey, Map.Entry::getValue,
+                        (a, b) -> a, LinkedHashMap::new
                 ));
     }
 
-
+    public Tache findById(Long id) {
+        return tacheRepository.findById(id).orElse(null);
+    }
 }
-

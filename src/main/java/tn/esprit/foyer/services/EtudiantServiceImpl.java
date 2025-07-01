@@ -1,11 +1,7 @@
 package tn.esprit.foyer.services;
 
-
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.foyer.configuration.EntityNotFoundExceptionById;
 import tn.esprit.foyer.entities.Etudiant;
@@ -20,44 +16,39 @@ import java.util.List;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class EtudiantServiceImpl implements  IEtudiantService{
+public class EtudiantServiceImpl implements IEtudiantService {
 
-
-
-    EtudiantRepository etudiantRepository;
-
-
-    FoyerRepository foyerRepository;
-
-
-    ReservationRepository reservationRepository;
+    private final EtudiantRepository etudiantRepository;
+    private final FoyerRepository foyerRepository;
+    private final ReservationRepository reservationRepository;
 
     @Override
     public List<Etudiant> retrieveAllEtudiants() {
+        log.info("Retrieving all etudiants");
         return etudiantRepository.findAll();
     }
 
     @Override
     public Etudiant addEtudiant(Etudiant e) {
-        log.info("debut methode addEtudiant");
-        // calcul tranche Age selon l'age
+        log.info("Adding new etudiant");
         return etudiantRepository.save(e);
     }
 
     @Override
     public Etudiant updateEtudiant(Etudiant e) {
-        log.info("debut methode updateEtudiant");
+        log.info("Updating etudiant");
         return etudiantRepository.save(e);
     }
-    public Etudiant findById(Long id) {
-        return etudiantRepository.findById(id).orElse(null);
-    }
+
     @Override
     public Etudiant retrieveEtudiant(Long idEtudiant) {
-        Etudiant e = etudiantRepository.findById(idEtudiant).orElse(null);
-        log.info("fin methode retrieveEtudiant");
+        log.info("Retrieving etudiant with id {}", idEtudiant);
+        return etudiantRepository.findById(idEtudiant)
+                .orElseThrow(() -> new EntityNotFoundExceptionById("No Etudiant found with id " + idEtudiant));
+    }
 
-        return e;
+    public Etudiant findById(Long id) {
+        return etudiantRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -65,37 +56,47 @@ public class EtudiantServiceImpl implements  IEtudiantService{
         if (!etudiantRepository.existsById(idEtudiant)) {
             throw new EntityNotFoundExceptionById("Invalid Id Etudiant was provided");
         }
-            etudiantRepository.deleteById(idEtudiant);
+        log.info("Removing etudiant with id {}", idEtudiant);
+        etudiantRepository.deleteById(idEtudiant);
     }
-    public void removeEtudiant(String nom,String prenom) {
-        Etudiant etudiant = etudiantRepository.findByNomEtAndPrenomEt(nom,prenom);
-        if (etudiant!=null) {
+
+    public void removeEtudiant(String nom, String prenom) {
+        Etudiant etudiant = etudiantRepository.findByNomEtAndPrenomEt(nom, prenom);
+        if (etudiant != null) {
             etudiantRepository.deleteById(etudiant.getIdEtudiant());
         }
-
     }
 
     @Override
     public List<Etudiant> addEtudiants(List<Etudiant> etudiants) {
-        log.info("debut methode addEtudiants");
-        List<Etudiant> etudiants1 =  etudiantRepository.saveAll(etudiants);
-        log.info("fin methode addEtudiants");
-        return etudiants1;
+        log.info("Adding list of etudiants");
+        return etudiantRepository.saveAll(etudiants);
     }
 
     @Override
-    public Etudiant affecterEtudiantAReservation(String nomEt, String prenomEt,
-                                                 String idReservation) {
-        Etudiant e = etudiantRepository.findByNomEtAndPrenomEt( nomEt, prenomEt);
-        Reservation r = reservationRepository.findById(idReservation).orElse(null);
-           // controle de saisie +
-          List<Etudiant> etudiants = new ArrayList<>();
-        if (r.getEtudiants()!=null) {
-            etudiants.addAll(r.getEtudiants());
+    public Etudiant affecterEtudiantAReservation(String nomEt, String prenomEt, String idReservation) {
+        // Vérifie si l'étudiant existe
+        Etudiant etudiant = etudiantRepository.findByNomEtAndPrenomEt(nomEt, prenomEt);
+        if (etudiant == null) {
+            throw new EntityNotFoundExceptionById("No Etudiant found with name: " + nomEt + " " + prenomEt);
         }
-            etudiants.add(e);
-            r.setEtudiants(etudiants);
-           reservationRepository.save(r);
-        return e;
+
+        // Vérifie si la réservation existe
+        Reservation reservation = reservationRepository.findById(idReservation)
+                .orElseThrow(() ->
+                        new EntityNotFoundExceptionById("No Reservation found with id " + idReservation));
+
+        // Évite les nulls sur la liste
+        List<Etudiant> etudiantsList = reservation.getEtudiants();
+        if (etudiantsList == null) {
+            etudiantsList = new ArrayList<>();
+        }
+
+        etudiantsList.add(etudiant);
+        reservation.setEtudiants(etudiantsList);
+        reservationRepository.save(reservation);
+
+        log.info("Etudiant {} {} assigned to reservation {}", nomEt, prenomEt, idReservation);
+        return etudiant;
     }
 }
