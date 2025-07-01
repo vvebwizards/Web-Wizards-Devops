@@ -1,24 +1,34 @@
-# Stage 1: Build the project with Maven (tests will run)
+# === Stage 1: Build the JAR with Maven (only if not using Nexus)
 FROM maven:3.8.4-openjdk-17 AS builder
 WORKDIR /app
 
-# Copy pom.xml and download dependencies to speed up subsequent builds
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
-# Copy the source code and build the jar
 COPY src/ src/
 RUN mvn clean package
 
-# Stage 2: Create a lightweight runtime image
+# === Stage 2: Final Image
 FROM openjdk:17-jdk-alpine
 WORKDIR /app
-
-# Use a wildcard to copy the generated jar from the builder stage
-COPY --from=builder /app/target/*.jar app.jar
-
-# Expose the port your Spring Boot app runs on (8083)
 EXPOSE 8083
 
-# Run the jar file
+ARG NEXUS_USERNAME
+ARG NEXUS_PASSWORD
+ARG NEXUS_URL
+
+# If Nexus URL is provided, download the jar. Otherwise, use the jar from builder stage.
+RUN if [ -n "$NEXUS_URL" ]; then \
+      echo "Downloading from Nexus..."; \
+      apk add --no-cache curl; \
+      curl -L -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" -o app.jar "${NEXUS_URL}"; \
+    else \
+      echo "Using JAR built in builder stage..."; \
+      mkdir -p /tmp; \
+      cp /tmp/built.jar app.jar; \
+    fi
+
+# Copy built jar if Nexus URL is not provided
+COPY --from=builder /app/target/*.jar /tmp/built.jar
+
 ENTRYPOINT ["java", "-jar", "app.jar"]

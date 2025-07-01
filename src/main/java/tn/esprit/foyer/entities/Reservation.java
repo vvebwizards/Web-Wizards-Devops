@@ -1,6 +1,5 @@
 package tn.esprit.foyer.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-
 import java.util.List;
 
 @Entity
@@ -20,16 +18,18 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Reservation implements Serializable {
+
     @Id
-    @Column(name="idReservation",length = 50)
+    @Column(name = "idReservation", length = 50)
     String idReservation; // Clé primaire
-   // @Temporal(TemporalType.DATE)
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy")
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy")
     LocalDate anneeUniversitaire;
+
     Boolean estValid;
-    @ManyToMany()
+
+    @ManyToMany
     @JsonIgnore
     List<Etudiant> etudiants;
 
 }
-

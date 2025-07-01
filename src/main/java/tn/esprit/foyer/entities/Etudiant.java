@@ -25,16 +25,6 @@ public class Etudiant implements Serializable {
      Long cin;
      String ecole;
      LocalDate dateNaissance;
-
-
-
-
-
-
-
-
-
-
     @OneToMany(mappedBy = "etudiant")
     List<Tache> taches;
     Float montantInscription;
@@ -44,12 +34,17 @@ public class Etudiant implements Serializable {
     @ManyToMany(mappedBy = "etudiants",fetch = FetchType.EAGER)
     List<Reservation> reservations;
 
-    @OneToOne
-    Tache tache;
     public Etudiant(String nomEt, String prenomEt, String ecole) {
         this.nomEt = nomEt;
         this.prenomEt = prenomEt;
         this.ecole = ecole;
+    }
+
+    public Etudiant(String nomEt, String prenomEt, String ecole,float montantInscription) {
+        this.nomEt = nomEt;
+        this.prenomEt = prenomEt;
+        this.ecole = ecole;
+        this.montantInscription= montantInscription;
     }
 
 

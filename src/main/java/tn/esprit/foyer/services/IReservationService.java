@@ -3,6 +3,7 @@ package tn.esprit.foyer.services;
 import tn.esprit.foyer.entities.Reservation;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface IReservationService {
 
@@ -16,5 +17,7 @@ public interface IReservationService {
             numChambre, long cin) ;
 
     List<Reservation> getReservationParAnneeUniversitaire(LocalDate dateDebut, LocalDate dateFin) ;
+
+    Map<Long, Integer> nbPlacesDisponibleParChambreAnneeEnCours();
 
 }

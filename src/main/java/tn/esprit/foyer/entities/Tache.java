@@ -1,6 +1,7 @@
 package tn.esprit.foyer.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;
@@ -10,7 +11,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @RequiredArgsConstructor
 public class Tache implements Serializable {
@@ -26,13 +26,21 @@ public class Tache implements Serializable {
      TypeTache typeTache;
 
     @ManyToOne()
+    @JsonIgnore
     Etudiant etudiant;
-    @OneToOne(mappedBy = "tache")
-    Etudiant etudiantResponsable;
+
+    @Enumerated(EnumType.STRING)
+    EtatTache etatTache;
 
 
-
-
-
+    public Tache(Long idTache,  LocalDate dateTache,  Integer duree, Float tarifHoraire, TypeTache typeTache, Etudiant etudiant, EtatTache etatTache) {
+        this.idTache = idTache;
+        this.dateTache = dateTache;
+        this.duree = duree;
+        this.tarifHoraire = tarifHoraire;
+        this.typeTache = typeTache;
+        this.etudiant = etudiant;
+        this.etatTache = etatTache;
+    }
 }
 

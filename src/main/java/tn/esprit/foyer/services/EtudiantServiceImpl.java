@@ -30,24 +30,25 @@ public class EtudiantServiceImpl implements IEtudiantService {
 
     @Override
     public Etudiant addEtudiant(Etudiant e) {
-        log.info("Starting addEtudiant");
-        // Additional processing (e.g., tranche Age calculation) can be added here.
+        log.info("Adding new etudiant");
         return etudiantRepository.save(e);
     }
 
     @Override
     public Etudiant updateEtudiant(Etudiant e) {
-        log.info("Starting updateEtudiant");
+        log.info("Updating etudiant");
         return etudiantRepository.save(e);
     }
 
     @Override
     public Etudiant retrieveEtudiant(Long idEtudiant) {
         log.info("Retrieving etudiant with id {}", idEtudiant);
-        // Using orElseThrow to handle cases where the etudiant is not found.
         return etudiantRepository.findById(idEtudiant)
-                .orElseThrow(() ->
-                        new EntityNotFoundExceptionById("No Etudiant found with id " + idEtudiant));
+                .orElseThrow(() -> new EntityNotFoundExceptionById("No Etudiant found with id " + idEtudiant));
+    }
+
+    public Etudiant findById(Long id) {
+        return etudiantRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -59,37 +60,43 @@ public class EtudiantServiceImpl implements IEtudiantService {
         etudiantRepository.deleteById(idEtudiant);
     }
 
+    public void removeEtudiant(String nom, String prenom) {
+        Etudiant etudiant = etudiantRepository.findByNomEtAndPrenomEt(nom, prenom);
+        if (etudiant != null) {
+            etudiantRepository.deleteById(etudiant.getIdEtudiant());
+        }
+    }
+
     @Override
     public List<Etudiant> addEtudiants(List<Etudiant> etudiants) {
-        log.info("Starting addEtudiants");
-        List<Etudiant> savedEtudiants = etudiantRepository.saveAll(etudiants);
-        log.info("Finished addEtudiants");
-        return savedEtudiants;
+        log.info("Adding list of etudiants");
+        return etudiantRepository.saveAll(etudiants);
     }
 
     @Override
     public Etudiant affecterEtudiantAReservation(String nomEt, String prenomEt, String idReservation) {
-        // Retrieve the etudiant and validate; throw exception if not found.
+        // Vérifie si l'étudiant existe
         Etudiant etudiant = etudiantRepository.findByNomEtAndPrenomEt(nomEt, prenomEt);
         if (etudiant == null) {
             throw new EntityNotFoundExceptionById("No Etudiant found with name: " + nomEt + " " + prenomEt);
         }
 
-        // Retrieve reservation and throw exception if not found.
+        // Vérifie si la réservation existe
         Reservation reservation = reservationRepository.findById(idReservation)
                 .orElseThrow(() ->
                         new EntityNotFoundExceptionById("No Reservation found with id " + idReservation));
 
-        // Prepare the list to avoid null pointer issues.
+        // Évite les nulls sur la liste
         List<Etudiant> etudiantsList = reservation.getEtudiants();
         if (etudiantsList == null) {
             etudiantsList = new ArrayList<>();
         }
+
         etudiantsList.add(etudiant);
         reservation.setEtudiants(etudiantsList);
-
         reservationRepository.save(reservation);
-        log.info("Etudiant {} {} affected to reservation {}", nomEt, prenomEt, idReservation);
+
+        log.info("Etudiant {} {} assigned to reservation {}", nomEt, prenomEt, idReservation);
         return etudiant;
     }
 }
